@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="WPFPages.UserControls.ImgButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFPages.UserControls"
+             xmlns:conv="clr-namespace:WPFPages.Converts" 
+		 xmlns:wpfpages="clr-namespace:WPFPages" 
+		 d:DataContext="{d:DesignInstance Type=wpfpages:INotifyPropertyChanged}"
+		 mc:Ignorable="d" 
+		 DataContext="ImgButton"
+		 x:Name="Imgbutton"
+             d:DesignHeight="125" Width="348">
+
+	<UserControl.Resources>
+		<conv:ResetTextWidth x:Key="resetTextWidth"/>
+		<conv:PadImgConverter x:Key="padImgConverter"/>
+		<conv:PadTextBlock x:Key="padTextblock"/>
+		<conv:TextWidthMinus10Percent x:Key="ReduceTextwidthConverter"/>
+		<conv:PadImageBase x:Key="padImageBase"/>
+	</UserControl.Resources>
+
+	<!--Height="{Binding Path=Height, ElementName=ImgButton}"
+		Width="{Binding Path=Width, ElementName=ImgButton}"-->
+	<Grid x:Name="OuterGrid"
+ 		Margin="4,-1,0,-3"
+		MouseEnter="RectBtn_MouseEnter"
+		MouseLeave="RectBtn_MouseLeave"
+		>
+		
+		<Grid.RenderTransform>
+		<TransformGroup>
+			<ScaleTransform ScaleX="1" ScaleY="1"/>
+			<SkewTransform/>
+			<RotateTransform/>
+			<TranslateTransform X="0" Y="0"/>
+		</TransformGroup>
+		</Grid.RenderTransform>
+		<Grid.Effect>
+			<!--// This uses ALL options-->
+			<DropShadowEffect 						
+						Color="{Binding Path=ShadowBlurColor, ElementName=Imgbutton}"
+						Opacity="{Binding Path=ShadowOpacity, ElementName=Imgbutton}"
+						ShadowDepth="{Binding Path=ShadowBlurSize, ElementName=Imgbutton}"
+						BlurRadius="{Binding Path=ShadowBlurRadius, ElementName=Imgbutton}"
+						RenderingBias="Quality"						
+						Direction="49"/>
+		</Grid.Effect>
+		
+        <!--<Button x:Name="Btn" 
+				  Margin="3,2,4,0" 
+				  RenderTransformOrigin="0.5,0.5"
+					>
+				<Button.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform ScaleY="1"/>
+						<SkewTransform/>
+						<RotateTransform/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</Button.RenderTransform>-->
+
+        <Grid x:Name="InnerGrid" 
+		MouseEnter="RectBtn_MouseEnter"
+		MouseLeave="RectBtn_MouseLeave"
+						>
+            <Border x:Name="Mainborder"
+				Height="{Binding Height,RelativeSource={RelativeSource Self}}" 
+				Width="{Binding Width ,RelativeSource={RelativeSource Self}}" 
+				CornerRadius="{Binding Cornerradius, ElementName=Imgbutton}"
+				Background="{Binding BackColor, ElementName=Imgbutton}"			 
+				BorderBrush="{Binding BorderColor, ElementName=Imgbutton}"
+				BorderThickness="{Binding BorderWidth, ElementName=Imgbutton}"
+				MouseEnter="RectBtn_MouseEnter"
+				MouseLeave="RectBtn_MouseLeave"
+				Margin="6,7,7,6">
+			
+				<Grid x:Name="Insidegrid"
+					Margin="4,0,0,0"
+					MouseEnter="RectBtn_MouseEnter"
+					MouseLeave="RectBtn_MouseLeave"
+					Width="{Binding ActualWidth, ElementName=Mainborder}"
+					Height="{Binding ActualHeight, ElementName=Mainborder}" >
+					
+					<Grid
+						MouseEnter="RectBtn_MouseEnter"
+						MouseLeave="RectBtn_MouseLeave" Margin="0,9,9,0"
+						>
+						<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="5"/>
+							<ColumnDefinition x:Name="ImgCell" Width="{Binding ImgWidth, ElementName=Imgbutton}"/>
+						<ColumnDefinition Width="10"/>
+							<ColumnDefinition x:Name="TxtCell" Width="{Binding TextWidth, ElementName=Imgbutton}"/>
+						</Grid.ColumnDefinitions>
+						
+					<Image x:Name="BtnImage"
+						Grid.Column="1"
+						Height="{Binding ActualHeight, ElementName=ImgCell, Converter={StaticResource padImageBase}}" 
+						Width="{Binding ImgWidth, ElementName=Imgbutton}"
+						Source="/Icons/cloud.png"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center" 
+						MouseEnter="RectBtn_MouseEnter"
+						MouseLeave="RectBtn_MouseLeave"
+						 Margin="-5 0 0 12"
+						Panel.ZIndex="5"/>
+						
+					<TextBlock Width="10" Grid.Column="2"/>
+
+					<TextBlock x:Name="BtnTextBlock"	
+							Grid.Column="3"
+							Height="{Binding TextHeight, ElementName=Imgbutton}" 
+							TextWrapping="{Binding TextWrap, ElementName=Imgbutton}" 
+							Text="{Binding BtnText, ElementName=Imgbutton}"
+							FontSize="{Binding Path=TextSize, ElementName=Imgbutton}"
+							FontStyle="{Binding FontDecoration, ElementName=Imgbutton}"
+							Foreground="{Binding BtnTextColor, ElementName=Imgbutton}"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							MouseEnter="RectBtn_MouseEnter"
+							MouseLeave="RectBtn_MouseLeave"
+							Opacity="1">
+
+							<TextBlock.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform 
+										ScaleX="{Binding TextWidthScale, ElementName=Imgbutton}"
+										ScaleY="{Binding TextHeightScale, ElementName=Imgbutton}"/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</TextBlock.RenderTransform>
+
+						</TextBlock>
+
+					<ContentPresenter />
+
+				</Grid>
+               </Grid>
+            </Border>
+
+        </Grid>
+   </Grid>
+</UserControl>

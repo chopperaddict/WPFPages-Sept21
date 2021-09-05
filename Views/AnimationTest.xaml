@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:userctrl="clr-namespace:WPFPages.UserControls" 
         xmlns:local="clr-namespace:WPFPages.Views"
-	  xmlns:datamodel="clr-namespace:WPFPages.ViewModels"
         xmlns:conv="clr-namespace:WPFPages.Converts"
+        xmlns:uderctrl="clr-namespace:WPFPages.UserControls"
         mc:Ignorable="d"
         Title="Animation Test" 
 	  Name="AnimWin"
@@ -23,6 +23,8 @@
 		<conv:TextWidthMinus10Percent x:Key="ReduceTextwidthConverter"/>
 		<conv:ResourceToBrushConverter x:Key="Resource2BrushConv"/>
 		<conv:MoveTextblockToTop x:Key="moveTextblockToTop"/>
+		<userctrl:ShadowLabelControl x:Key="ShadowTextControl"/>
+		<userctrl:ImgButton x:Key="ImgControl"/>
 		<!--#region gradient resources-->
 
 		<LinearGradientBrush x:Key="Greenbackground" StartPoint="0.5,1" EndPoint="0.5,0">
@@ -94,17 +96,17 @@
 				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="RectbuttonStackPanel">
-				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="30"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="5"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
 		<!--#endregion-->
 
 		<Storyboard x:Key="ShowLeftMenu">
-			<DoubleAnimation Duration="0:0:0.30" From="0" To="143" Storyboard.TargetName="SlideOutMenu" Storyboard.TargetProperty="Width" 
+			<DoubleAnimation Duration="0:0:0.30" From="0" To="145" Storyboard.TargetName="SlideOutMenu" Storyboard.TargetProperty="Width" 
 					     FillBehavior="HoldEnd"/>
 		</Storyboard>
 		<Storyboard x:Key="HideLeftMenu">
-			<DoubleAnimation Duration="0:0:0.20" From="143" To="0" Storyboard.TargetName="SlideOutMenu" Storyboard.TargetProperty="Width" FillBehavior="HoldEnd"/>
+			<DoubleAnimation Duration="0:0:0.20" From="145" To="0" Storyboard.TargetName="SlideOutMenu" Storyboard.TargetProperty="Width" FillBehavior="HoldEnd"/>
 		</Storyboard>
 
 		<Storyboard x:Key="FadeInMenu">
@@ -138,12 +140,76 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
+
+
+		<!--<Style x:Key="TextBoxUsingTextBoxStyle" BasedOn="{x:Null}" TargetType="{x:Type TextBox}">
+			<Setter Property="Foreground" Value="{Binding Foreground}"/>
+			<Setter Property="Background" Value="{Binding Background}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Red0}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="AllowDrop" Value="true"/>
+			<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+			<Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+			<Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBox}">
+						<TextBox BorderThickness="{TemplateBinding BorderThickness}" IsReadOnly="True" Text="{TemplateBinding Text}" Background="{x:Null}" BorderBrush="{x:Null}" />
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>-->
+
+		<Style x:Key="BtnAsLabel" TargetType="{x:Type Button}">
+			<Style.Resources>
+				<DataTemplate x:Key="ButtonLabelTtemplate">
+					<Grid>
+						<Border
+							Height="25"
+							Width="120"
+							BorderBrush="Black"
+							BorderThickness="2"
+							UseLayoutRounding="True"
+							>
+
+						</Border>
+						<TextBlock
+							Panel.ZIndex="1"
+							FontSize="{Binding TextSize}" 
+							FontStyle="{Binding FontDecoration}"
+							Foreground="{Binding BtnTextColor}"
+							Height="{Binding TextHeight}" 
+							OverridesDefaultStyle="True"
+							Width="{Binding TextWidth}" 
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							TextAlignment="Center"    
+							TextWrapping="Wrap"
+							Text="{Binding BtnText, ElementName=RectangularButton}"				
+							>
+							<TextBlock.Effect>
+								<DropShadowEffect 
+								ShadowDepth="{Binding TextShadowSize, ElementName=RectangularButton}"
+								Direction="{Binding TextShadowDirection, ElementName=RectangularButton}"
+								Color="{Binding ShadowColor, ElementName=RectangularButton}"
+								Opacity="{Binding TextShadowOpacity, ElementName=RectangularButton}"
+								BlurRadius="{Binding TextShadowRadius, ElementName=RectangularButton}"/>
+							</TextBlock.Effect>
+
+						</TextBlock>
+					</Grid>
+				</DataTemplate>
+			</Style.Resources>
+
+		</Style>
+
 	</Window.Resources>
 
 	<Window.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+		<!--<EventTrigger RoutedEvent="FrameworkElement.Loaded">
 			<BeginStoryboard Storyboard="{StaticResource SlideStackPanelRight}"/>
-		</EventTrigger>
+		</EventTrigger>-->
 	</Window.Triggers>
 
 	<!--START OF FUNCTIONALITY-->
@@ -177,9 +243,8 @@
 					ToolTip="Click to Hide the menu bar"
 					MouseLeftButtonDown="Image_MouseLeftButtonDown"
 					RenderTransformOrigin="14.6,1.9" 
-					Margin="170,8,10,459" Grid.Column="1"
-					Visibility="Visible"/>
-
+					Margin="170,-62,10,459" Grid.Column="1"
+					Visibility="Hidden"/>
 
 			<!--#region Left Slide menu permanent button-->
 			<Canvas x:Name="LeftslidingMenuMarker"
@@ -188,7 +253,7 @@
 				  Background="Transparent"
 				  Height="160"
 				   Panel.ZIndex="10"
-				  Width="130"
+				  Width="46"
 				  HorizontalAlignment="Left"
 				  VerticalAlignment="Top"
 				  Visibility="Visible">
@@ -200,12 +265,13 @@
 						MouseEnter="SlideMenu_mouseEnter"			
 						MouseLeave="SlideMenu_mouseLeave"			
 						Height="128" 
-						   Panel.ZIndex="10"
-					     Width="35"
+						UseLayoutRounding="True"
+						Panel.ZIndex="10"
+						Width="35"
 						CornerRadius="12"
 						>
 					<TextBlock x:Name="LeftMenuTogglePanel"
-							Background="Red"
+							Background="Transparent"
 							Height="130" 
 							Width="17"
 							Margin="10,5,8,-7"
@@ -218,7 +284,8 @@
 							FontSize="20"
 							Foreground="{StaticResource White0}"					     
 							Panel.ZIndex="11"
-							Opacity="0"
+							Opacity="0.4"
+							UseLayoutRounding="True"
 							Visibility="Visible" VerticalAlignment="Top">
 						<TextBlock.RenderTransform>
 							<TransformGroup>
@@ -233,423 +300,450 @@
 			</Canvas>
 			<!--#endregion Left Slide menu permanent button-->
 
-
 			<!--#region Slide out from left menu-->
 
-			<!--MouseEnter="SlideMenu_mouseEnter"-->
-			<!--MouseLeave="SlideMenu_mouseLeave"-->
 			<StackPanel x:Name="SlideOutMenu"
+				
 					HorizontalAlignment="Left"
 						Orientation="Vertical"
 						Grid.Row="0"
 						Grid.Column="0"
-						Panel.ZIndex="10"
-						Height="520"
-						Margin="-2 0 0 0" 
-						Width="150"
+						Panel.ZIndex="10" 
+						Width="146"
 						Background="{StaticResource Black5}"
-						Visibility="Visible">
-				<Border  x:Name="Menu0"
-							Background="{StaticResource Red8}"
-							BorderThickness="1 1 1 4"
-							BorderBrush="{StaticResource Red6}"
-							Margin="2 0 0 0" 
-							Panel.ZIndex="10"
-							Height="30"
-							Width="140">
-					<TextBlock
-							Text="Hide Menu"
-							TextWrapping="NoWrap"
-							MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
-							HorizontalAlignment="Center"
-							Margin="0 5 0 0" 
-							TextAlignment="Center"
-							Foreground="White"
-							Background="{Binding Background, ElementName=Menu0}"
-							Panel.ZIndex="10"
-							Height="20" 
-							Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform 
-											ScaleX="0.9" 
-											ScaleY="0.9"/>
-								<SkewTransform
-											CenterX="0"
-											CenterY="0"
-											AngleX="0"
-											AngleY="0"/>
-								<RotateTransform
-											CenterX="0"
-											CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
-					</TextBlock>
-				</Border>
+						Visibility="Visible" Canvas.Top="12" Canvas.Left="189" Margin="0,0,0,-3" >
 
-				<!--MouseEnter="Expand_MenuItemBorderOpen"-->
-				<!--MouseLeave="Contract_Border0"-->
-				<Border  x:Name="MenuOpen"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Blue5}"
-							Background="{StaticResource Cyan1}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="MenuOpen_Click"
-							Height="30"
-							Width="140">
-					<TextBlock x:Name="tb0"
-								Text="{Binding MenuOpenText, ElementName=AnimWin}"
-								Background="{Binding Background, ElementName=MenuOpen}"
-								HorizontalAlignment="Center"
-								MouseLeftButtonDown="Menu0_Click"
-								Margin="0 5 0 0" 
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Foreground="White"
-								Height="25" 
-								Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-											CenterX="0"
-											CenterY="0"
-											AngleX="0"
-											AngleY="0"/>
-								<RotateTransform
-											CenterX="0"
-											CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
+				<Border Height="10"/>
 
-					</TextBlock>
-				</Border>
-				<Border  x:Name="Menu1"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Red5}"
-							Background="{StaticResource Red7}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu1_Click"
-							Height="30"
-							Width="140">
-					<!--MouseEnter="Expand_MenuItemBorder1"-->
-					<TextBlock x:Name="tb1"
-								Text="{Binding Menu1Text, ElementName=AnimWin}"
-								HorizontalAlignment="Center"
-								MouseLeftButtonDown="Menu1_Click"
-								Margin="0 5 0 0" 
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Foreground="White"
-								Background="{Binding Background, ElementName=Menu1}"
-								Height="25" 
-								Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-												CenterX="0"
-												CenterY="0"
-												AngleX="0"
-												AngleY="0"/>
-								<RotateTransform
-												CenterX="0"
-												CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
-					</TextBlock>
-				</Border>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu0"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="Hide Menu"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Green3}"
+					BtnTextColorDown="{DynamicResource White0}"
+					CornerRadius="0"
+					Background="{DynamicResource Green8}"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
+					MouseoverColor="{DynamicResource Green3}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="4"
+					ShadowDirection="130"
+					ShadowColor="White"
+					ShadowDownColor="Red"
+					ShadowOpacity="0.9"
+					ShadowBlur="1"
+						
+					TextHeight="4"
+					TextSize ="16" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					
+					Width="Auto"
+					Margin="6,0" Height="50" />
 
-				<Border  x:Name="Menu2"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Orange4}"
-							Background="{StaticResource Orange0}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu2_Click"
-							Height="30"
-							Width="140">
-					<TextBlock x:Name="tb2"
-								Text="{Binding Menu2Text, ElementName=AnimWin}"
-								HorizontalAlignment="Center"
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Margin="0 5 0 0" 
-								MouseLeftButtonDown="Menu2_Click"
-								Foreground="White"
-								Background="{Binding Background, ElementName=Menu2}"
-								Height="25" 
-							     Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-												CenterX="0"
-												CenterY="0"
-												AngleX="0"
-												AngleY="0"/>
-								<RotateTransform
-												CenterX="0"
-												CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
-					</TextBlock>
-				</Border>
 
-				<Border  x:Name="Menu3"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Blue4}"
-							Background="{StaticResource Blue2}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu3_Click"
-							MouseLeave="Contract_Border3"
-							Height="30"
-							Width="140">
-					<TextBlock x:Name="tb3"
-								Text="{Binding Menu3Text, ElementName=AnimWin}"
-								HorizontalAlignment="Center"
-								MouseLeftButtonDown="Menu3_Click"
-								MouseLeave="Contract_Border3"
-								Margin="0 5 0 0" 
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Foreground="White"
-								Background="{Binding Background, ElementName=Menu3}"
-								Height="35" 
-								Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-										CenterX="0"
-										CenterY="0"
-										AngleX="0"
-										AngleY="0"/>
-								<RotateTransform
-										CenterX="0"
-										CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
+				<userctrl:ShadowLabelControl 
+					x:Name="MenuOpen"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText=" Hide Menu Bars"
+					BtnTextColor="Red"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="{DynamicResource White5}"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="MenuOpen_Click"
+					MouseoverColor="{DynamicResource Green3}"		
+					RenderTransformOrigin="0.5,0.5" 
+					
+					ShadowDepth="3"
+					ShadowDirection="0"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="1"
+						
+					TextHeight="4"
+					TextSize ="14" 
+					TextTopOffset="0"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+					Margin="6,0" Height="37" />
 
-					</TextBlock>
-				</Border>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu1"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="{Binding Menu1Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="{DynamicResource Green6}"
+					LinearBackground="{DynamicResource HeaderBorderBrushGreen}"
+					LinearBackgroundDown="{DynamicResource HeaderBorderBrushYellow}"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu1_Click"
+					MouseoverColor="{DynamicResource Green8}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
+						
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					UseStandardBackground="False"
+					Visibility="Visible"
+					Width="Auto"
+					Margin="6,0" Height="37"/>
 
-				<Border x:Name="Menu4"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Red6}"
-							Background="{StaticResource Red4}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu4_Click"
-							MouseLeave="Contract_Border4"
-							Height="30"
-							Width="140">
-					<TextBlock x:Name="tb4"
-								Text="{Binding Menu4Text, ElementName=AnimWin}"
-								HorizontalAlignment="Center"						     
-								MouseLeftButtonDown="Menu4_Click"
-								MouseLeave="Contract_Border4"
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Margin="0 5 0 0" 
-								Foreground="White"
-								Background="{Binding Background, ElementName=Menu4}"
-								Height="25" 
-							     Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-												CenterX="0"
-												CenterY="0"
-												AngleX="0"
-												AngleY="0"/>
-								<RotateTransform
-												CenterX="0"
-												CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
-					</TextBlock>
-				</Border>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu2"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="{Binding Menu2Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="Cyan"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu2_Click"
+					MouseoverColor="{DynamicResource Green8}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
 
-				<Border  x:Name="Menu5"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Green5}"
-							Background="{StaticResource Green7}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu5_Click"
-							MouseLeave="Contract_Border5"
-							Height="30"
-							Width="140">
-					<!--<Border.Style>
-								<Style TargetType="Border">
-									<Style.Triggers>
-										<Trigger Property="IsMouseOver" Value="False">
-											<Setter Property="Height" Value="35"/>
-										</Trigger>
-										<Trigger Property="IsMouseOver" Value="True">
-											<Setter Property="Height" Value="120"/>
-										</Trigger>
-									</Style.Triggers>
-								</Style>
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+				Loaded="TogglePanes_Loaded" Margin="6,0" Height="37" />
 
-							</Border.Style>-->
-					<TextBlock x:Name="tb5"
-								IsHitTestVisible="True"
-								Text="{Binding Menu5Text, ElementName=AnimWin}"
-								HorizontalAlignment="Center"
-								Margin="2 5 0 0" 
-								MouseLeftButtonDown="Menu5_Click"
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Foreground="White"
-								Background="{Binding Background, ElementName=Menu5}"
-								Height="25" 
-							     Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-												CenterX="0"
-												CenterY="0"
-												AngleX="0"
-												AngleY="0"/>
-								<RotateTransform
-												CenterX="0"
-												CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu3"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="{Binding Menu3Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="Cyan"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu3_Click"
+					MouseoverColor="{DynamicResource Green8}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
+						
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+				Loaded="TogglePanes_Loaded" Margin="6,0" Height="37" />
 
-					</TextBlock>
-				</Border>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu4"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="{Binding Menu4Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="Cyan"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu4_Click"
+					MouseoverColor="{DynamicResource Cyan4}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
+						
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+				Loaded="TogglePanes_Loaded" Margin="6,0" Height="37" />
 
-				<Border  x:Name="Menu6"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Orange7}"
-							Background="{StaticResource Yellow1}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu6_Click"
-							Height="30"
-							Width="140">
-					<!--<Border.Style>
-								<Style TargetType="Border">
-									<Style.Triggers>
-										<Trigger Property="IsMouseOver" Value="False">
-											-->
-					<!--<Setter Property="{Binding TextTopZero, ElementName=AnimWin}" Value="0"/>-->
-					<!--
-											<Setter Property="Height" Value="40"/>
-										</Trigger>
-										<Trigger Property="IsMouseOver" Value="True">
-											-->
-					<!--<Setter Property="Margin" Value="0 -70 0 0"/>-->
-					<!--
-											<Setter Property="Height" Value="120"/>
-										</Trigger>
-									</Style.Triggers>
-								</Style>
-							</Border.Style>-->
-					<TextBlock x:Name="tb6"
-								Text="{Binding Menu6Text, ElementName=AnimWin}"
-								HorizontalAlignment="Center"
-								VerticalAlignment="Center"
-								Margin="2 5 0 0" 
-								MouseLeftButtonDown="Menu6_Click"
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Foreground="{StaticResource Black1}"
-								Background="{Binding Background, ElementName=Menu6}"
-								Height="25" 
-								Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-												CenterX="0"
-												CenterY="0"
-												AngleX="0"
-												AngleY="0"/>
-								<RotateTransform
-												CenterX="0"
-												CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu5"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="{Binding Menu5Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="Cyan"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu5_Click"
+					MouseoverColor="{DynamicResource Cyan4}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
+						
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+				Loaded="TogglePanes_Loaded" Margin="6,0" Height="37" />
 
-								<!--<TextBlock.Style>
-									<Style TargetType="TextBlock">
-										<Style.Triggers>
-											<Trigger Property="IsMouseOver" Value="False">
-												<Setter Property="Margin" Value="0 0 0 0"/>
-												<Setter Property="Height" Value="40"/>
-											</Trigger>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter Property="Margin" Value="0 -70 0 0"/>
-												<Setter Property="Height" Value="120"/>
-											</Trigger>
-										</Style.Triggers>
-									</Style>
-								</TextBlock.Style>-->
-					</TextBlock>
-				</Border>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu6"
+					BorderPadding="1"
+					BorderColor="{DynamicResource Orange1}"
+					BorderWidth="1"
+					BtnText="{Binding Menu6Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource Black1}"
+					BtnColorDown="{DynamicResource Blue5}"
+					BtnTextColorDown="{DynamicResource Black0}"
+					CornerRadius="0"
+					Background="Cyan"
+					FontStyle="Normal"
+					FontFamily="Garamonde"
+					FontWeight="Bold"
+					Height="40"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu6_Click"
+					MouseoverColor="{DynamicResource Cyan4}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+						
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="White"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
+						
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+				Loaded="TogglePanes_Loaded" Margin="6,0" 
+						/>
+				<userctrl:ShadowLabelControl 
+					x:Name="Menu7"
+					BorderPadding="1"
+					BorderWidth="2"
+					BorderColor="{DynamicResource Orange1}"
+					BtnText="{Binding Menu7Text, ElementName=AnimWin}"
+					BtnTextColor="{DynamicResource White0}"
+					BtnColorDown="{DynamicResource Orange3}"
+					BtnTextColorDown="{DynamicResource Black1}"
+					CornerRadius="5"
+					Background="{DynamicResource Black5}"
+					FontStyle="Normal"
+					FontDecoration="Verdana"
+					FontWeight="Normal"
+					UseLayoutRounding="True" 
+					MouseLeftButtonDown="Menu7_Click"
+					MouseoverColor="{DynamicResource Cyan4}"		
+								
+					RenderTransformOrigin="0.5,0.5" 									
+								
+					ShadowDepth="3"
+					ShadowDirection="330"
+					ShadowColor="Red"
+					ShadowOpacity="0.9"
+					ShadowBlur="0"
+						
+					TextHeight="4"
+					TextSize ="11" 
+					TextTopOffset="10"
+					TextWidth="0"
+					Visibility="Visible"
+					Width="Auto"
+				Loaded="TogglePanes_Loaded" Margin="3,0,5,0" Height="48" />
 
-				<Border  x:Name="Menu7"
-							BorderThickness="1 1 1 2"
-							BorderBrush="{StaticResource Gray2}"
-							Background="{StaticResource Black3}"
-							Margin="2 0 0 0" 
-							MouseLeftButtonDown="Menu7_Click"
-							Height="40"
-							Width="140">
-					<TextBlock x:Name="tb7"
-								Text="{Binding Menu7Text, ElementName=AnimWin}"
-								FontSize="18"
-								HorizontalAlignment="Center"
-								MouseLeftButtonDown="Menu7_Click"
-								TextAlignment="Center"
-								TextWrapping="NoWrap"
-								Foreground="White"
-								Background="{Binding Background, ElementName=Menu7}"
-								Margin="0 5 0 0" 
-								Height="35" 
-								Width="140">
-						<TextBlock.RenderTransform>
-							<TransformGroup>
-								<ScaleTransform ScaleY="0.9"
-												ScaleX="1.0"/>
-								<SkewTransform
-												CenterX="0"
-												CenterY="0"
-												AngleX="0"
-												AngleY="0"/>
-								<RotateTransform
-												CenterX="0"
-												CenterY="0"/>
-								<TranslateTransform/>
-							</TransformGroup>
-						</TextBlock.RenderTransform>
-
-					</TextBlock>
-				</Border>
-
+				<userctrl:ShadowLabelControl 
+					ShadowColor="Violet"
+					ShadowBlur="2"
+					ShadowDepth="3"
+					ShadowDirection="333"
+					Background="White"
+					CornerRadius="15"
+					LinearBackground="{DynamicResource Yellowbackground}"
+					LinearBackgroundDown="{DynamicResource Greenbackground}"
+					Height="85" Margin="12,0,6,0"
+					UseStandardBackground="True"
+					/>
 			</StackPanel>
 			<!--#endregion-->
 
+			<!--#region panel1 Canvas -->
+			<Grid x:Name="Panel1"
+					  Height="{Binding Path=Height, ElementName=InnerGrid}"
+					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
+					UseLayoutRounding="True"
+					Visibility="Visible"
+					>
+
+				<Canvas x:Name="Panel1Canvas"					  
+						Background="{StaticResource Gray3}"
+						Grid.Column="0"
+						Grid.ColumnSpan="1"					
+						Panel.ZIndex="0"
+						UseLayoutRounding="True"
+						Height="{Binding Path=Height, ElementName=Panel1}"
+						Width="{Binding Path=Width, ElementName=Panel1}" 
+						Visibility="Visible">
+
+					<Border  x:Name="Panel1Border"
+						Canvas.Top="20"
+						Canvas.Left="0"
+						Background="Red"
+						MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
+						MouseEnter="SlideMenu_mouseEnter"			
+						MouseLeave="SlideMenu_mouseLeave"			
+						Height="128" 
+						UseLayoutRounding="True"
+					     Width="35"
+						CornerRadius="12"
+						/>
+				</Canvas>
+			</Grid>
+			<!--#endregion panel1 view-->
 
 			<!--#region panel2 Canvas -->
-			<StackPanel x:Name="Panel4"
+			<Grid x:Name="Panel2"
+					  Height="{Binding Path=Height, ElementName=InnerGrid}"
+					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
+					Visibility="Visible"
+					>
+
+				<Canvas x:Name="Panel2Canvas"					  
+						Background="{StaticResource Gray3}"
+						Grid.Column="0"
+						Grid.ColumnSpan="1"					
+						Height="{Binding Path=Height, ElementName=Panel2}"
+						Panel.ZIndex="0"
+						Width="{Binding Path=Width, ElementName=Panel2}" 
+						Visibility="Visible">
+
+					<Border  x:Name="Panel2Border"
+						Canvas.Top="20"
+						Canvas.Left="0"
+						Background="Red"
+						MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
+						MouseEnter="SlideMenu_mouseEnter"			
+						MouseLeave="SlideMenu_mouseLeave"			
+						UseLayoutRounding="True"
+						Height="128" 
+					     Width="35"
+						CornerRadius="12"
+						/>
+
+
+				</Canvas>
+			</Grid>
+			<!--#endregion panel2 view-->
+
+			<!--#region panel3Canvas -->
+			<Grid x:Name="Panel3"
+					  Height="{Binding Path=Height, ElementName=InnerGrid}"
+					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
+					Visibility="Visible"
+					>
+
+				<Canvas x:Name="Panel3Canvas"					  
+						Background="{StaticResource Gray3}"
+						Grid.Column="0"
+						Grid.ColumnSpan="1"					
+						Height="{Binding Path=Height, ElementName=Panel3}"
+						Panel.ZIndex="0"
+						Width="{Binding Path=Width, ElementName=Panel3}" 
+						Visibility="Visible">
+
+					<Border  x:Name="Panel3Border"
+						Canvas.Top="20"
+						Canvas.Left="0"
+						Background="Red"
+						MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
+						MouseEnter="SlideMenu_mouseEnter"			
+						MouseLeave="SlideMenu_mouseLeave"			
+						UseLayoutRounding="True"
+						Height="128" 
+					     Width="35"
+						CornerRadius="12"
+						/>
+				</Canvas>
+			</Grid>
+			<!--#endregion panel3 view-->
+
+			<!--#region panel4 Canvas -->
+			<Grid x:Name="Panel4"
 					  Height="{Binding Path=Height, ElementName=InnerGrid}"
 					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
 					Visibility="Visible"
@@ -659,65 +753,10 @@
 						Background="{StaticResource Gray3}"
 						Grid.Column="0"
 						Grid.ColumnSpan="1"					
-						Height="{Binding Path=Height, ElementName=LeftStackpanel}"
+						Height="{Binding Path=Height, ElementName=Panel4}"
 						Panel.ZIndex="0"
-						Width="{Binding Path=Width, ElementName=LeftStackpanel}" 
+						Width="{Binding Path=Width, ElementName=Panel4}" 
 						Visibility="Visible">
-					<userctrl:ImgButton
-						Canvas.Left="267"
-						BackColor="{StaticResource Blue2}"
-						BorderWidth="3"
-						BorderColor="{StaticResource White1}"
-						BtnTextColor="{StaticResource White0}"
-						BtnText="Menu style button" 
-						Canvas.Top="30" 
-						Cornerradius="5"
-						FontDecoration="Italic"
-						FontWeight="Black"
-						Height="62" 
-						ImgWidth="40"
-						MouseLeftButtonDown="Image_Click"
-						RenderTransformOrigin="0.5,0.5" 
-						ShadowBlurColor="DarkCyan"
-						ShadowBlurSize ="15"
-						ShadowBlurRadius="25"
-						ShadowOpacity="0.95"	
-						TextSize="12"
-						TextWidth="120"
-						TextHeight="35"
-						TextHeightScale="1.1"  
-						TextWidthScale="0.8"  
-						Url="/icons/cloud.png" 
-						Width="186"
-						/>
-
-					<userctrl:ImgButton
-						BackColor="{StaticResource Magenta3}"
-						BorderWidth="1"
-						BorderColor="{StaticResource White1}"
-						BtnTextColor="{StaticResource Black0}"
-						BtnText="Close Window Now" 						
-						Canvas.Left="249"
-						Canvas.Top="164" 
-						Cornerradius="5"
-						Height="70" 
-						ImgWidth="40"
-						FontDecoration="Italic"
-						FontWeight="Bold"
-						MouseLeftButtonDown="Image_Click"
-						ShadowBlurColor="Violet"
-						ShadowBlurSize ="15"
-						ShadowBlurRadius="30"
-						ShadowOpacity="0.75"	
-						TextSize="16"
-						TextWidth="160"
-						TextHeight="38"
-						TextHeightScale="1.0"  
-						TextWidthScale="0.8" 
-						TextWrap="NoWrap"
-						RenderTransformOrigin="0.5,0.5" 
-						Url="/icons/cloud.png" 
-						Width="211" />
 					<!--MouseEnter="Tb1_Mouseover"-->
 					<Border  x:Name="Panel4Border"
 						Background="Red"
@@ -728,85 +767,34 @@
 						MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
 						MouseEnter="SlideMenu_mouseEnter"			
 						MouseLeave="SlideMenu_mouseLeave"			
+						UseLayoutRounding="True"
 						Panel.ZIndex="10"
 					     Width="35"
 						>
+						<userctrl:ImgButton
+							Canvas.Left="225"
+							Canvas.Top="227"
+							Width="Auto"
+							BackColor="Yellow" 
+							BtnText="123456789"
+							TextSize="18"
+							BtnTextColor="Black"
+							Source="/Icons/cloud.png"
+							ImgWidth="45"
+							Visibility="Visible" 
+							Margin="193,245,-370,-188"
+						
+						/>
+
 					</Border>
 				</Canvas>
-			</StackPanel>
-			<!--#endregion panel2 view-->
+			</Grid>
+			<!--#endregion panel4 view-->
 
-			<!--#region Left Ellipse Button Panel-->
 
-			<!--#region panel1 Canvas -->
-			<StackPanel x:Name="Panel1"
-					  Height="{Binding Path=Height, ElementName=InnerGrid}"
-					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
-					Visibility="Hidden"
-					>
+			<!--#region ThreeDButtonPanel-->
 
-				<Canvas x:Name="Panel1Canvas"
-					  
-						Background="{StaticResource Gray3}"
-						Grid.Column="0"
-						Grid.ColumnSpan="1"					
-						Height="{Binding Path=Height, ElementName=LeftStackpanel}"
-						Panel.ZIndex="0"
-						Width="{Binding Path=Width, ElementName=LeftStackpanel}" 
-						Visibility="Visible">
-
-					<!--MouseEnter="Tb1_Mouseover"-->
-					<Border  x:Name="Panel1Border"
-						Canvas.Top="20"
-						Canvas.Left="0"
-						Background="Red"
-						MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
-						MouseEnter="SlideMenu_mouseEnter"			
-						MouseLeave="SlideMenu_mouseLeave"			
-						Height="128" 
-					     Width="35"
-						CornerRadius="12"
-						/>
-				</Canvas>
-			</StackPanel>
-			<!--#endregion panel1 view-->
-
-			<!--#region panel3 Canvas -->
-			<StackPanel x:Name="Panel3"
-					  Height="{Binding Path=Height, ElementName=InnerGrid}"
-					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
-					Visibility="Hidden"
-					>
-
-				<Canvas x:Name="Panel3Canvas"
-					  
-						Background="{StaticResource Gray3}"
-						Grid.Column="0"
-						Grid.ColumnSpan="1"					
-						Height="{Binding Path=Height, ElementName=LeftStackpanel}"
-						Panel.ZIndex="0"
-						Width="{Binding Path=Width, ElementName=LeftStackpanel}" 
-						Visibility="Visible">
-
-					<!--MouseEnter="Tb1_Mouseover"-->
-					<Border  x:Name="Panel3Border"
-						Canvas.Top="20"
-						Canvas.Left="0"
-						Background="Red"
-						MouseLeftButtonDown="Tb1_MouseLeftButtonDown"
-						MouseEnter="SlideMenu_mouseEnter"			
-						MouseLeave="SlideMenu_mouseLeave"			
-						Height="128" 
-					     Width="35"
-						CornerRadius="12"
-						/>
-				</Canvas>
-			</StackPanel>
-			<!--#endregion panel3 view-->
-
-			<!--#region Left Ellipse (3D) Button Panel-->
-
-			<StackPanel x:Name="LeftStackpanel"
+			<Grid x:Name="ThreeDButtonsPanel"
 					  Height="{Binding Path=Height, ElementName=InnerGrid}"
 					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
 					 Visibility="Hidden"
@@ -817,9 +805,9 @@
 						Background="{StaticResource Gray3}"
 						Grid.Column="0"
 						Grid.ColumnSpan="1"					
-						Height="{Binding Path=Height, ElementName=LeftStackpanel}"
+						Height="{Binding Path=Height, ElementName=ThreeDButtonsPanel}"
 						Panel.ZIndex="0"
-						Width="{Binding Path=Width, ElementName=LeftStackpanel}" 
+						Width="{Binding Path=Width, ElementName=ThreeDButtonsPanel}" 
 						Visibility="Visible"
 						  
 						>
@@ -992,28 +980,33 @@
 				</Canvas>
 
 				<!--#endregion panel2 view-->
-			</StackPanel>
+			</Grid>
 
 			<!--#endregion Left 3dButton Panel-->
 
 
-			<!--#region Tab Control panel1 view-->
-			<Canvas x:Name="TabControlPanel"
+			<!--#region TabControlpanel view-->
+			<Grid x:Name="TabControlPanel"
+					  Height="{Binding Path=Height, ElementName=InnerGrid}"
+					  Width="{Binding Path=Width, ElementName=InnerGrid}" 
+					 Visibility="Hidden"
+					>
+				<Canvas x:Name="TabControlCanvas"
 						Background="{StaticResource Gray3}"
 						Grid.Column="0"
 						Grid.ColumnSpan="2"		
 						  Panel.ZIndex="0"
-						Height="{Binding Path=Height, ElementName=LeftStackpanel}"
-						Width="{Binding Path=Width, ElementName=LeftStackpanel}" 
-						Visibility="Hidden" Margin="0,0,170,0"
+						Height="{Binding Path=Height, ElementName=TabControlPanel}"
+						Width="{Binding Path=Width, ElementName=TabControlPanel}" 
+						Visibility="Visible" Margin="0,0,170,0"
 						>
-				<!--Set up data context pointing to Bank data for our Listview i the tab control-->
-				<!--<Canvas.DataContext>
+					<!--Set up data context pointing to Bank data for our Listview i the tab control-->
+					<!--<Canvas.DataContext>
 						<datamodel:BankAccountViewModel/>
 					</Canvas.DataContext>-->
 
 
-				<Image x:Name="myimage2" 
+					<Image x:Name="myimage2" 
 							Height="22"
 							MouseLeftButtonDown="Image_MouseLeftButtonDown"
 							Source="/Icons/left-arrow.png" 
@@ -1025,7 +1018,7 @@
 							Visibility="Hidden"/>
 
 
-				<TabControl
+					<TabControl
 							x:Name="TabControl1"
 							Background="Bisque"
 							BorderThickness="1"
@@ -1038,64 +1031,64 @@
 							Width="359"							
 							>
 
-					<TabControl.Resources>
-						<Style TargetType="{x:Type TabItem}">
-							<Setter Property="HeaderTemplate">
-								<Setter.Value>
-									<DataTemplate>
-										<ContentPresenter Content="{TemplateBinding Content}">
-											<ContentPresenter.LayoutTransform>
-												<RotateTransform Angle="0" />
-											</ContentPresenter.LayoutTransform>
-										</ContentPresenter>
-									</DataTemplate>
-								</Setter.Value>
-							</Setter>
-							<Setter Property="Padding" Value="3" />
-						</Style>
-					</TabControl.Resources>
-					<TabItem x:Name="Tab1" Header="General1">
-						<StackPanel>
-							<Ellipse
+						<TabControl.Resources>
+							<Style TargetType="{x:Type TabItem}">
+								<Setter Property="HeaderTemplate">
+									<Setter.Value>
+										<DataTemplate>
+											<ContentPresenter Content="{TemplateBinding Content}">
+												<ContentPresenter.LayoutTransform>
+													<RotateTransform Angle="0" />
+												</ContentPresenter.LayoutTransform>
+											</ContentPresenter>
+										</DataTemplate>
+									</Setter.Value>
+								</Setter>
+								<Setter Property="Padding" Value="3" />
+							</Style>
+						</TabControl.Resources>
+						<TabItem x:Name="Tab1" Header="General1">
+							<StackPanel>
+								<Ellipse
 										Fill="{StaticResource HeaderBorderBrushGreen}"
 										Height="86"
 										Margin="18,0,17,0">
-							</Ellipse>
+								</Ellipse>
 
 
-							<ContentPresenter x:Name="ContentSite"
+								<ContentPresenter x:Name="ContentSite"
 										    VerticalAlignment="Center"
 										    HorizontalAlignment="Center"
 										    ContentSource="Header"
 										    Margin="10,2"/>
 
-							<Label Content="This is Tab 1"  HorizontalAlignment="Center"/>
+								<Label Content="This is Tab 1"  HorizontalAlignment="Center"/>
 
-							<Canvas>
-								<ListView Height="208" Width="330" Canvas.Left="11" Canvas.Top="4">
-									<ListView.ItemTemplate>
-										<DataTemplate >
-											<StackPanel Orientation="Horizontal">
-												<Label Content="{Binding Name}" Foreground="Red"/>
-												<Label Content="{Binding Age}"/>
-											</StackPanel>
-										</DataTemplate>
-										<!--<DataTemplate>
+								<Canvas>
+									<ListView Height="208" Width="330" Canvas.Left="11" Canvas.Top="4">
+										<ListView.ItemTemplate>
+											<DataTemplate >
+												<StackPanel Orientation="Horizontal">
+													<Label Content="{Binding Name}" Foreground="Red"/>
+													<Label Content="{Binding Age}"/>
+												</StackPanel>
+											</DataTemplate>
+											<!--<DataTemplate>
 												<StackPanel Orientation="Horizontal">
 												<TextBlock x:Name="Tb1" Text="{Binding BankNo, FallbackValue=123456}"/>
 												<TextBlock x:Name="Tb2" Text="{Binding CustNo, FallbackValue=567321}"/>
 												</StackPanel>												
 											</DataTemplate>-->
-									</ListView.ItemTemplate>
-								</ListView>
-							</Canvas>
-						</StackPanel>
-					</TabItem >
-					<TabItem Header="Selection " >
-						<Grid
+										</ListView.ItemTemplate>
+									</ListView>
+								</Canvas>
+							</StackPanel>
+						</TabItem >
+						<TabItem Header="Selection " >
+							<Grid
 									Height="{Binding Path=ActualHeight, ElementName=TabControl1}"
 									Width="{Binding Path=ActualWidth, ElementName=TabControl1}">
-							<local:ThreeDeeBtnControl x:Name="Threed2"
+								<local:ThreeDeeBtnControl x:Name="Threed2"
 										Margin="6,18,12,240"
 										BorderWidth="0"
 										BtnBorder="{StaticResource Black1}"
@@ -1119,7 +1112,7 @@
 										TextHeight ="18"
 										Grid.ColumnSpan="3" Grid.Column="1"
 													  />
-							<local:ThreeDeeBtnControl x:Name="Threed1"
+								<local:ThreeDeeBtnControl x:Name="Threed1"
 										Margin="0,259,29,29"
 										BorderWidth="0"
 										BtnBorder="{StaticResource Black1}"
@@ -1143,43 +1136,44 @@
 										TextHeight ="18"
 										Grid.Column="4"
 													  />
-						</Grid>
-					</TabItem>
+							</Grid>
+						</TabItem>
 
-					<TabItem Header="Another option" >
-						<DockPanel>
-							<Button Background="CornflowerBlue"	
+						<TabItem Header="Another option" >
+							<DockPanel>
+								<Button Background="CornflowerBlue"	
 										  Content="here we go"
 										  DockPanel.Dock="Top" 
 										  Height="43"/>
-							<!--<Button Background="Azure" 	Content="there  we went"							  
+								<!--<Button Background="Azure" 	Content="there  we went"							  
 										  DockPanel.Dock="Right" Width="95"/>-->
-							<Button Background="Coral"  	
+								<Button Background="Coral"  	
 										  Content="and again"
 										  DockPanel.Dock="Left" 
 										  Width="70"/>
-							<Button Background="Green" 	
+								<Button Background="Green" 	
 										Content="and finally"
 										DockPanel.Dock="Bottom" 
 										Height="42"/>
-							<Button Background="Yellow" 
+								<Button Background="Yellow" 
 										  Margin="0,142,0,23" 
 										  Width="95"
 										  Content="This is the middle" 
 										  RenderTransformOrigin="0.5,0.5">
-							</Button>
+								</Button>
 
-							<Label Margin="0,140,0,67" 
+								<Label Margin="0,140,0,67" 
 										 Width="92">label only</Label>
-						</DockPanel>
+							</DockPanel>
 
-					</TabItem>
-					<TabItem Header="Page 4" >
-						<Border x:Name="border8"
-									Background="Aqua" Margin="26,128,93,63"
-									BorderBrush="Red" BorderThickness="0,3,0,15"
+						</TabItem>
+						<TabItem Header="Page 4" >
+							<Border x:Name="border8"
+							Background="Aqua" Margin="26,128,93,63"
+							BorderBrush="Red" BorderThickness="0,3,0,15"
+							UseLayoutRounding="True"
 									>
-							<TextBlock
+								<TextBlock
 										Height="{Binding Path=Height, ElementName=border8}"
 										Width="{Binding Path=ActualWidth, ElementName=border8, Converter={StaticResource ReduceTextwidthConverter},ConverterParameter=20}"
 										TextAlignment="Center"
@@ -1187,11 +1181,11 @@
 										Text="This is a textblock inside a border inside a TabControl inside a Canvas using a multiple value BorderThickness to achieve the Top/Bottom border lines"
 										VerticalAlignment="Center"
 										HorizontalAlignment="Center"/>
-						</Border>
-					</TabItem>
-				</TabControl>
+							</Border>
+						</TabItem>
+					</TabControl>
 
-				<local:ThreeDeeBtnControl    x:Name="Ellip1"
+					<local:ThreeDeeBtnControl    x:Name="Ellip1"
 							Grid.Column="0"
 							BorderWidth="0"
 							BtnBorder="{StaticResource Black1}"
@@ -1218,9 +1212,9 @@
 						     Visibility="Visible"
 							/>
 
-			</Canvas>
-			<!--#endregion Tab Control panel1 view-->
-
+				</Canvas>
+				<!--#endregion Tab Control panel1 view-->
+			</Grid>
 
 			<!--#region Entire Right side Rectangle buttons Canvas-->
 
@@ -1274,6 +1268,7 @@
 							Width="23"
 							Background="Transparent" 
 							Height="492" 
+							UseLayoutRounding="True"
 							Canvas.Top="0" Canvas.Left="1">
 						<!--Click to slide menu Out to right /Back-->
 						<Image x:Name="OpenCloseButton"
@@ -1310,33 +1305,77 @@
 							Width="44" />
 
 					<!--#region RectangleButtons-->
+					<userctrl:RectangleControl    x:Name="TogglePanes"
+							BorderWidth="2"
+							BtnBorder="{DynamicResource Green7}"
+							BtnText="Toggle Panes"
+							BtnTextColor="{DynamicResource Black0}"
+							BtnTextColorDown="{DynamicResource White0}"
+							Canvas.Left="18" 
+							Canvas.Top="26" 
+							FillTop="Teal"
+							FontFamily="Garamonde"
+							FontWeight="Black"
+							Height="79"
+							MouseLeftButtonDown="Togglepanel"
+							MouseoverColor="{DynamicResource Green1}"		
+							
+							RenderTransformOrigin="0.5,0.5" 									
+							ShadowBlurColor="#FF345863"
+							ShadowBlurSize ="10"
+							ShadowBlurRadius="5"
+							ShadowOpacity="0.65"	
+						
+							TextShadowSize="2"
+							TextShadowDirection="330"
+							TextShadowColor="White"
+							TextShadowOpacity="0.9"
+							TextShadowRadius="1"								
+						
+							TextHeight="5"
+							TextSize ="14" 
+							TextWidth="-5"	
+							Visibility="Visible"
+							Width="160" 
+							Loaded="TogglePanes_Loaded"
+							/>
+
 					<userctrl:RectangleControl x:Name="TestRectangle"
 							Grid.Column="1"
 							Height="79"
 							Width="160"
 							BorderWidth="2"
-							BtnBorder="{StaticResource Red5}"
-							BtnText="Change Text Width Scale ++"
-							BtnTextColor="{StaticResource White0}"
-							BtnTextColorDown="{StaticResource White0}"
+							BtnBorder="{DynamicResource Red5}"
+							BtnText="Text Width Scale++"
+							BtnTextColor="{DynamicResource White0}"
+							BtnTextColorDown="{DynamicResource White0}"
 							FontDecoration="Normal"
-							FontFamily="Arial"
+							FontFamily="Verdana"
 							FontWeight="Normal"
-							FillTop="{StaticResource Red4}"
+							FillTop="{DynamicResource Red4}"
 							HorizontalContentAlignment="Center"
 							MouseLeftButtonDown="TextScaleUp"
-							MouseoverColor="{StaticResource Red5}"		
+							MouseoverColor="{DynamicResource Red5}"		
 									
 							ShadowBlurColor="#FF2F3007"
-							ShadowOpacity="0.5"
+							ShadowOpacity="0.9"
 							ShadowBlurSize ="10"
-							ShadowBlurRadius="5"
-							Visibility="Visible"
+							ShadowBlurRadius="12"
+
+							TextShadowSize="1"
+							TextShadowDirection="330"
+							TextShadowColor="Black"
+							TextShadowOpacity="1"
+							TextShadowRadius="1"								
+
 							Panel.ZIndex="5"
-							TextSize="16" 
+
+							TextHeight="5"
+							TextWidth="-5"	
+							TextSize="11" 
 							
 							Canvas.Left="20" 
-							Canvas.Top="94" 
+							Canvas.Top="99" 
 							>
 						<userctrl:RectangleControl.RenderTransform>
 							<TransformGroup>
@@ -1352,16 +1391,16 @@
 							Height="79"
 							Width="160"
 							BorderWidth="2"
-							BtnBorder="{StaticResource Green8}"
-							BtnText="Change Text Width Scale"
-							BtnTextColor="{StaticResource White0}"
-							BtnTextColorDown="{StaticResource White0}"
+							BtnBorder="{DynamicResource Green8}"
+							BtnText="Text Width Scale--"
+							BtnTextColor="{DynamicResource White0}"
+							BtnTextColorDown="{DynamicResource White0}"
 							FontDecoration="Bold"
 							FontFamily="Arial"
 							FontWeight="DemiBold"
-							FillTop="{StaticResource Green6}"
+							FillTop="{DynamicResource Green6}"
 							HorizontalContentAlignment="Center"	
-							MouseoverColor="{StaticResource Green3}"		
+							MouseoverColor="{DynamicResource Green3}"		
 							MouseLeftButtonDown="TextScaleDn"
 							RenderTransformOrigin="0.5,0.5" 		
 							ShadowBlurColor="#FF2F3007"
@@ -1370,26 +1409,29 @@
 							ShadowBlurRadius="5"
 									
 							Visibility="Visible"
-							Panel.ZIndex="5"
+							
+							TextHeight="5"
+							TextWidth="-5"	
 							TextSize="12" 
 							Grid.Column="1" 
 							Canvas.Left="18" 
-							Canvas.Top="164" 
+							Canvas.Top="170" 
 							/>
+
 					<userctrl:RectangleControl    x:Name="TestRectangle_Copy1"
 							Grid.Column="1"
 							Height="79"
 							Width="160"
 							BorderWidth="1"
-							BtnBorder="{StaticResource Black1}"
-							BtnText="Change Text Height Scale ++"
-							BtnTextColor="{StaticResource Black0}"
-							BtnTextColorDown="{StaticResource White0}"
+							BtnBorder="{DynamicResource Black1}"
+							BtnText="Text Height Scale++"
+							BtnTextColor="{DynamicResource Black0}"
+							BtnTextColorDown="{DynamicResource White0}"
 							FontDecoration="Normal"
 							FontFamily="Arial"
 							FontWeight="DemiBold"
-							FillTop="{StaticResource Yellow1}"
-							MouseoverColor="{StaticResource Yellow2}"		
+							FillTop="{DynamicResource Yellow1}"
+							MouseoverColor="{DynamicResource Yellow2}"		
 							MouseLeftButtonDown="TextHeightScaleUp"
 							RenderTransformOrigin="0.5,0.5" 
 							ShadowBlurColor="#FF2F3007"
@@ -1397,11 +1439,14 @@
 							ShadowBlurSize ="10"
 							ShadowBlurRadius="5"
 									
+							TextHeight="5"
+							TextSize="12" 
+							TextWidth="-5"
+
 							Visibility="Visible"
 							Panel.ZIndex="5"
-							TextSize="12" 
 							Canvas.Left="18" 
-							Canvas.Top="231" 
+							Canvas.Top="246" 
 							/>
 
 					<userctrl:RectangleControl    x:Name="TestRectangle_Copy2"
@@ -1409,15 +1454,15 @@
 							Height="79"
 							Width="160"
 							BorderWidth="2"
-							BtnBorder="{StaticResource Blue8}"
-							BtnText="Text Height scale"
-							BtnTextColor="{StaticResource White0}"
-							BtnTextColorDown="{StaticResource White0}"
+							BtnBorder="{DynamicResource Blue8}"
+							BtnText="Text Height scale --"
+							BtnTextColor="{DynamicResource Black2}"
+							BtnTextColorDown="{DynamicResource White0}"
 							FontDecoration="Normal"
 							FontFamily="Garamonde"
 							FontWeight="Bold"
-							FillTop="{StaticResource Blue4}"
-							MouseoverColor="{StaticResource Orange4}"		
+							FillTop="{DynamicResource Blue4}"
+							MouseoverColor="{DynamicResource Orange4}"		
 							MouseLeftButtonDown="TextHeightScaleDn"
 							RenderTransformOrigin="0.5,0.5" 		
 							ShadowBlurColor="#FF2F3007"
@@ -1425,91 +1470,85 @@
 							ShadowBlurSize ="10"
 							ShadowBlurRadius="5"
 									
-							Visibility="Visible"
-							Panel.ZIndex="5"
+							TextHeight="5"
+							TextWidth="-5"	
 							TextSize ="12" 
-							Canvas.Left="18" 
-							Canvas.Top="297" 
-							/>
-					<userctrl:RectangleControl    x:Name="TestRectangle_Copy3"
-							Grid.Column="1"
-							Height="79"
-							Width="160"
-							BorderWidth="2"
-							BtnBorder="{StaticResource Magenta0}"
-							BtnText="Exit Window"
-							BtnTextColor="{StaticResource White0}"
-							BtnTextColorDown="{StaticResource White3}"
-							FontDecoration="Italic"
-							FontFamily="Arial"
-							FontWeight="DemiBold"
-							FillTop="{StaticResource Red1}"							
-							MouseLeftButtonDown="TestRectangle_Copy3_MouseLeftButtonDown"			
-							MouseoverColor="{StaticResource Green6}"		
-							RenderTransformOrigin="0.5,0.5" 
-							ShadowBlurColor="#FF2F3007"
-							ShadowOpacity="0.45"
-							ShadowBlurSize ="10"
-							ShadowBlurRadius="5"
-									
+
+							TextShadowSize="3"
+							TextShadowDirection="330"
+							TextShadowColor="White"
+							TextShadowOpacity="0.7"
+							TextShadowRadius="3"								
+
 							Visibility="Visible"
-							Panel.ZIndex="5"
-							TextSize ="19" 
-							Canvas.Left="18"
-							Canvas.Top="427" />
+							
+							Canvas.Left="18" 
+							Canvas.Top="320" 
+							/>
 
 					<userctrl:RectangleControl    x:Name="TestRectangle_Copy4"
 							Height="79"
 							Width="160"
 							BorderWidth="2"
-							BtnBorder="{StaticResource Blue2}"
-							
-							BtnText="Click here to set height of Red Button at the left"
-							BtnTextColor="{StaticResource White0}"
-							BtnTextColorDown="{StaticResource White0}"
+							BtnBorder="{DynamicResource Blue2}"							
+							BtnText="Set Red Button Height at left "
+							BtnTextColor="{DynamicResource Yellow1}"
+							BtnTextColorDown="{DynamicResource White0}"
 							FontDecoration="Italic"
 							FontFamily="Garamonde"
 							FontWeight="DemiBold"
-							FillTop="{StaticResource Blue4}"
-							MouseoverColor="{StaticResource Blue1}"		
+							FillTop="{DynamicResource Blue4}"
+							MouseoverColor="{DynamicResource Blue1}"		
 							MouseLeftButtonDown="TextHeightChange"			
 							RenderTransformOrigin="0.5,0.5" 
-							ShadowBlurColor="#FF2F3007"
-							ShadowOpacity="0.45"
+							ShadowBlurColor="{DynamicResource BackgroundColor1}"
+							ShadowOpacity="0.85"
 							ShadowBlurSize ="10"
 							ShadowBlurRadius="5"
-							TextWidth="115"		
-							Visibility="Visible"
-							Panel.ZIndex="5"
-							TextSize ="11" 
-							Canvas.Left="18" 
-							Canvas.Top="361" />
+	
+							TextShadowSize="5"
+							TextShadowDirection="330"
+							TextShadowColor="Black"
+							TextShadowOpacity="1"
+							TextShadowRadius="3"								
 
-					<userctrl:RectangleControl    x:Name="TogglePanes"
-							BorderWidth="2"
-							BtnBorder="{StaticResource Green7}"
-							BtnText="Toggle Panes"
-							BtnTextColor="{StaticResource White0}"
-							BtnTextColorDown="{StaticResource White0}"
+							TextHeight="3"
+							TextSize="11"
+							TextWidth="-5"	
+							
 							Canvas.Left="18" 
-							Canvas.Top="26" 
-							FontDecoration="Normal"
-							FillTop="Teal"
-							FontFamily="Garamonde"
-							FontWeight="Black"
+							Canvas.Top="392" />
+
+					<userctrl:RectangleControl    x:Name="TestRectangle_Copy3"
+							Grid.Column="1"
 							Height="79"
-							MouseLeftButtonDown="Togglepanel"
-							MouseoverColor="{StaticResource Green1}"		
-							Panel.ZIndex="5"
-							RenderTransformOrigin="0.5,0.5" 									
-							ShadowBlurColor="#FF345863"
-							ShadowBlurSize ="10"
-							ShadowBlurRadius="5"
-							ShadowOpacity="0.65"									
-							TextSize ="16" 
-							Visibility="Visible"
 							Width="160"
-							/>
+							BorderWidth="2"
+							BtnBorder="{DynamicResource Magenta0}"
+							BtnText="Exit Window"
+							BtnTextColor="{DynamicResource White0}"
+							BtnTextColorDown="{DynamicResource White3}"
+							FontDecoration="Italic"
+							FontFamily="Arial"
+							FontWeight="DemiBold"
+							FillTop="{DynamicResource Red1}"							
+							MouseLeftButtonDown="TestRectangle_Copy3_MouseLeftButtonDown"			
+							MouseoverColor="{DynamicResource Green6}"		
+							RenderTransformOrigin="0.5,0.5" 
+										
+							ShadowBlurColor="Red"
+							ShadowOpacity="0.75"
+							ShadowBlurSize ="10"
+							ShadowBlurRadius="15"
+										
+							TextHeight="5"
+							TextWidth="-8"	
+							Visibility="Visible"
+							Panel.ZIndex="5"
+							TextSize ="18"
+							Canvas.Left="18"
+							Canvas.Top="466" />
+
 
 					<TextBox x:Name="TextSizeSettings"
 							Background="{Binding Path=Background, ElementName=TestRectangle_Copy4}"

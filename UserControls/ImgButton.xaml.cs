@@ -16,6 +16,8 @@ using System . Windows . Media . Imaging;
 using System . Windows . Navigation;
 using System . Windows . Shapes;
 
+using Newtonsoft . Json . Linq;
+
 using WPFPages . Views;
 
 namespace WPFPages . UserControls
@@ -59,7 +61,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( BackColorProperty, value );
-				this. Refresh ( );
+				Mainborder. Refresh ( );
 			}
 		}
 		public static readonly DependencyProperty BackColorProperty =
@@ -75,9 +77,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region BorderColor
-		/// <summary>
-		/// Color of the border around the top surface of the button
-		/// </summary>
 		public Brush BorderColor
 		{
 			get
@@ -87,7 +86,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( BorderColorProperty, value );
-				InvalidateVisual ( );
+				Mainborder . Refresh ( );
 			}
 			//set{}
 		}
@@ -99,9 +98,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region BorderWidth
-		/// <summary>
-		/// Width of the border line around the top of the button
-		/// </summary>
 		public double BorderWidth
 		{
 			get
@@ -111,7 +107,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( BorderWidthProperty, value );
-				InvalidateVisual ( );
+				Mainborder . Refresh ( );
 			}
 			//set { }
 		}
@@ -123,7 +119,6 @@ namespace WPFPages . UserControls
 
 		#endregion
 
-
 		#region BtnText
 		public string BtnText
 		{
@@ -134,7 +129,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( BtnTextProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 			//set{}
 		}
@@ -150,8 +145,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region BtnTextColor
-		/// <summary>
-		/// Color pf the text with button at rest
 		/// </summary>
 		public Brush BtnTextColor
 		{
@@ -162,7 +155,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( BtnTextColorProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 			//set{}
 		}
@@ -173,12 +166,7 @@ namespace WPFPages . UserControls
 			new PropertyMetadata ( new SolidColorBrush ( Colors . Black ) ) );
 		#endregion
 
-
-
 		#region Cornerradius
-		/// <summary>
-		/// Size of the button text we store for use elsewhere
-		/// </summary>
 		public CornerRadius Cornerradius
 		{
 			get
@@ -213,9 +201,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region FontDecoration
-		/// <summary>
-		/// Font Styling option - Typically Normal, Italic, Oblique
-		/// </summary>
 		public string FontDecoration
 		{
 			get
@@ -225,7 +210,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( FontDecorationProperty, value );
-				InvalidateVisual ( );
+				BtnTextBlock . Refresh ( );
 			}
 			//set{}
 		}
@@ -238,10 +223,35 @@ namespace WPFPages . UserControls
 		private static void OnFontDecorationChangedCallBack ( DependencyObject sender, DependencyPropertyChangedEventArgs e )
 		{
 			//			Console . WriteLine ( $"FontDecoration Property changed to [{ value}]" );
-			RectangleControl tc = sender as RectangleControl;
+			//RectangleControl tc = sender as RectangleControl;
 			//FontWeight fw = ( FontWeight)e . NewValue ;
 			//tc . FontWeight = fw;
 
+		}
+		#endregion
+
+		#region Source
+		public string Source
+		{
+			get
+			{
+				return ( string ) GetValue ( SourceProperty );
+			}
+			set
+			{
+				SetValue ( BtnTextProperty, value );
+				BtnImage . Refresh ( );
+			}
+			//set{}
+		}
+		new public static readonly DependencyProperty SourceProperty =
+			DependencyProperty . Register ( "Source",
+			typeof ( string ),
+			typeof ( ImgButton ),
+			new FrameworkPropertyMetadata ( "", new PropertyChangedCallback ( OnSourcePropertyCallBack ) ) );
+		private static void OnSourcePropertyCallBack ( DependencyObject sender, DependencyPropertyChangedEventArgs e )
+		{
+			Console . WriteLine ( $"Source  set to  [{e . NewValue}] in changed handler." );
 		}
 		#endregion
 
@@ -255,8 +265,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( ImgWidthProperty, value );
-				this . Refresh ( );
-				//BtnImage . UpdateLayout( );
+				BtnImage . Refresh ( );
 			}
 		}
 		public static readonly DependencyProperty ImgWidthProperty =
@@ -272,10 +281,7 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region ShadowOpacity
-		/// <summary>
-		/// Set the opacity of the button shadow values = 0-1
-		/// </summary>
-		public double ShadowOpacity
+			public double ShadowOpacity
 		{
 			get
 			{
@@ -285,7 +291,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( ShadowOpacityProperty, value );
-				//				InvalidateVisual ( );
+				Mainborder. Refresh ( );
 
 			}
 
@@ -305,9 +311,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region ShadowBlurSize
-		/// <summary>
-		/// Set the opacity of the button shadow values = 0-1
-		/// </summary>
 		public double ShadowBlurSize
 		{
 			get
@@ -318,7 +321,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( ShadowBlurSizeProperty, value );
-				InvalidateVisual ( );
+				Mainborder. Refresh ( );
 			}
 		}
 		public static readonly DependencyProperty ShadowBlurSizeProperty =
@@ -336,9 +339,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region ShadowBlurRadius
-		/// <summary>
-		/// Set the Radius of the button shadow values = 0-1
-		/// </summary>
 		public double ShadowBlurRadius
 		{
 			get
@@ -349,9 +349,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( ShadowBlurRadiusProperty, value );
-				InvalidateVisual ( );
 				Mainborder . Refresh ( );
-				this . Refresh ( );
 			}
 		}
 		public static readonly DependencyProperty ShadowBlurRadiusProperty =
@@ -367,10 +365,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region ShadowBlurColor
-
-		/// <summary>
-		/// Color of the border around the top surface of the button
-		/// </summary>
 		public Color ShadowBlurColor
 		{
 			get
@@ -380,6 +374,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( ShadowBlurColorProperty, value );
+				Mainborder. Refresh ( );
 			}
 			//set{}
 		}
@@ -392,9 +387,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region TextSize
-		/// <summary>
-		/// Size of the button text
-		/// </summary>
 		public int TextSize
 		{
 			get
@@ -405,7 +397,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( TextSizeProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 
 		}
@@ -423,9 +415,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region TextWidth
-		/// <summary>
-		/// Size of the button text we store for use elsewhere
-		/// </summary>
 		public int TextWidth
 		{
 			get
@@ -434,10 +423,10 @@ namespace WPFPages . UserControls
 			}
 			set
 			{
-				if ( value < 50 )
-					value = 120;
+				//if ( value < 50 )
+				//	value = 120;
 				SetValue ( TextWidthProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 			//set{}
 		}
@@ -462,9 +451,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region TextHeight
-		/// <summary>
-		/// Size of the button text we store for use elsewhere
-		/// </summary>
 		public int TextHeight
 		{
 			get
@@ -473,10 +459,10 @@ namespace WPFPages . UserControls
 			}
 			set
 			{
-				if ( value < 50 )
-					value = 120;
+				//if ( value < 50 )
+				//	value = 120;
 				SetValue ( TextHeightProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 			//set{}
 		}
@@ -501,10 +487,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region TextHeightScale
-		/// <summary>
-		/// Set to a value of  -x to +x to shrink or stretch text on a button
-		/// normally range is between 0 & 1
-		/// </summary>
 		public double TextHeightScale
 		{
 			get
@@ -515,7 +497,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( TextHeightScaleProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 
 		}
@@ -532,10 +514,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region TextWidthScale
-		/// <summary>
-		/// Set to a value of  -x to +x to shrink or stretch text on a button
-		/// normally range is between 0 & 1
-		/// </summary>
 		public double TextWidthScale
 		{
 			get
@@ -545,8 +523,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( TextWidthScaleProperty, value );
-				this . Refresh ( );
-
+				BtnTextBlock . Refresh ( );
 			}
 
 		}
@@ -564,9 +541,6 @@ namespace WPFPages . UserControls
 		#endregion
 
 		#region Url
-		/// <summary>
-		/// The Text to be displayed on the button at rest (See Button Down option below)
-		/// </summary>
 		public string Url
 		{
 			get
@@ -576,7 +550,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( UrlProperty, value );
-				this . Refresh ( );
+				BtnTextBlock . Refresh ( );
 			}
 			//set{}
 		}
@@ -604,8 +578,7 @@ namespace WPFPages . UserControls
 			set
 			{
 				SetValue ( TextWrapProperty, value );
-				this . Refresh ( );
-				//BtnImage . UpdateLayout( );
+				BtnTextBlock . Refresh ( );
 			}
 		}
 		public static readonly DependencyProperty TextWrapProperty =
@@ -619,6 +592,135 @@ namespace WPFPages . UserControls
 			Console . WriteLine ( $"OnTextWrap set to  [{e . NewValue}] in changed handler." );
 		}
 		#endregion
+
+		#region TextShadowOpacity
+		public double TextShadowOpacity
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowOpacitProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowOpacitProperty, value );
+				BtnTextBlock . Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowOpacitProperty =
+			DependencyProperty . Register ( "TextShadowOpacity",
+			typeof ( double ),
+			typeof ( ImgButton ),
+			new PropertyMetadata ( ( double )1.0 ), OnTextShadowOpacityProperty );
+
+		private static bool OnTextShadowOpacityProperty ( object value )
+		{
+			return true;
+		}
+		#endregion
+
+		#region TextShadowSize
+		public double TextShadowSize
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowSizeProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowSizeProperty, value );
+				BtnTextBlock . Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowSizeProperty =
+			DependencyProperty . Register ( "TextShadowSize",
+			typeof ( double ),
+			typeof ( ImgButton ),
+			new PropertyMetadata ( ( double ) 2 ), OnTextShadowSizePropertyProperty );
+
+		private static bool OnTextShadowSizePropertyProperty ( object value )
+		{
+			//			Console . WriteLine ( $"ShadowBlurSizeProperty = {value}" );
+
+			return true;
+		}
+		#endregion
+
+		#region TextShadowRadius
+		public double TextShadowRadius
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowRadiusProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowRadiusProperty, value );
+				BtnTextBlock . Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowRadiusProperty =
+			DependencyProperty . Register ( "TextShadowRadius",
+			typeof ( double ),
+			typeof ( ImgButton ),
+			new PropertyMetadata ( ( double ) 1 ), OnTextShadowRadiusProperty );
+
+		private static bool OnTextShadowRadiusProperty ( object value )
+		{
+			return true;
+		}
+		#endregion
+
+		#region TextShadowDirection
+		public double TextShadowDirection
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowDirectionProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowDirectionProperty, value );
+				BtnTextBlock . Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowDirectionProperty =
+			DependencyProperty . Register ( "TextShadowDirection",
+			typeof ( double ),
+			typeof ( ImgButton ),
+			new PropertyMetadata ( ( double ) 330 ), OnTextShadowDirectionPropertyProperty );
+
+		private static bool OnTextShadowDirectionPropertyProperty ( object value )
+		{
+			return true;
+		}
+		#endregion
+
+		#region TextShadowColor
+		public Color TextShadowColor
+		{
+			get
+			{
+				return ( Color ) GetValue ( TextShadowColorProperty );
+			}
+			set
+			{
+				SetValue ( TextShadowColorProperty, value );
+				BtnTextBlock . Refresh ( );
+			}
+			//set{}
+		}
+		public static readonly DependencyProperty TextShadowColorProperty =
+			DependencyProperty . Register ( "TextShadowColor",
+			typeof ( Color ),
+			typeof ( ImgButton ),
+			new PropertyMetadata ( Colors . DarkGray ) );
+
+		#endregion
+
 
 		private void RectBtn_MouseEnter ( object sender, MouseEventArgs e )
 		{

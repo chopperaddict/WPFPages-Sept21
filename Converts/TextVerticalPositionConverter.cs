@@ -52,7 +52,6 @@ namespace WPFPages . Converts
 			double result = 0;
 			double TextHeight = 0;
 			string fontstyle = "";
-//			double divisor = 2.0;
 			object caller = values [ 0 ];
 			ThreeDeeBtnControl tb = caller as ThreeDeeBtnControl;
 			string Content = tb . BtnText;

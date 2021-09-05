@@ -4,7 +4,7 @@ using System . Windows . Data;
 
 namespace WPFPages . Converts
 {
-	public class ResetTextWidth : IValueConverter
+	public  class PadShadow : IValueConverter
 	{
 		/// <summary>
 		/// Adds a dependency value received an XPath Converter parameter to move a textbolock downwrds to fit correctly
@@ -16,12 +16,9 @@ namespace WPFPages . Converts
 		/// <returns></returns>
 		public object Convert ( object value, Type targetType, object parameter, CultureInfo culture )
 		{
-			//			return value;
-			if ( value == null || parameter == null )
-				return value;
-			int offset = System . Convert . ToInt32 ( parameter );
-			int currentvalue = System . Convert . ToInt32 ( value );
-			//currentvalue -= offset;
+			double currentvalue = System . Convert . ToDouble ( value );
+			double paramvalue = System . Convert . ToDouble ( parameter );
+			currentvalue += paramvalue;
 			return currentvalue;
 		}
 
@@ -29,5 +26,7 @@ namespace WPFPages . Converts
 		{
 			return value;
 		}
+
+
 	}
 }

@@ -10,19 +10,19 @@ namespace WPFPages . Converts
 		{
 			if ( value == null )
 				return null;
-			int val = int.Parse(value.ToString() );
+			double  val = System . Convert . ToDouble ( value );
 			if ( val == 0 )
 				return value;
 			if ( parameter != null )
 			{
 				if ( parameter . ToString ( ) != "" )
-					return val - System . Convert . ToInt32 ( parameter );
+					return val - System . Convert . ToDouble( parameter );
 				else
-					return val - 35;
+					return val;
 			}
 			else
 			{
-				int converter = ( val * 90 ) / 100;
+				double converter = ( val * 90 ) / 100;
 				return converter;
 			}
 		}

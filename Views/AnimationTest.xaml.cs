@@ -34,7 +34,7 @@ namespace WPFPages . Views
 	/// </summary>
 	public partial class AnimationTest : Window
 	{
-		static int counter = 1;
+		static int counter = 0;
 		private Point MousePosition = new Point ( 0, 0 );
 		private bool MouseDn = false;
 		private int defaultMenuheight = 0;
@@ -101,7 +101,7 @@ namespace WPFPages . Views
 			get{return menu0Text;}
 			set{menu0Text = value;}
 		}
-		private string menu1Text = "Open Panel 1";
+		private string menu1Text = "Panel 1";
 		public string Menu1Text
 		{
 			get
@@ -113,13 +113,13 @@ namespace WPFPages . Views
 				menu1Text = value;
 			}
 		}
-		private string menu2Text = "Image Button Panel";
+		private string menu2Text = "Panel 2";
 		public string Menu2Text
 		{
 			get{return menu2Text;}
 			set{menu2Text = value;}
 		}
-		private string menu3Text = "Open Panel 3";
+		private string menu3Text = "Panel 3";
 		public string Menu3Text
 		{
 			get
@@ -158,7 +158,7 @@ namespace WPFPages . Views
 			}
 		}
 
-		private string menu6Text = "Panel 2";
+		private string menu6Text = "Panel 4";
 		public string Menu6Text
 		{
 			get
@@ -171,7 +171,7 @@ namespace WPFPages . Views
 			}
 		}
 
-		private string menu7Text = "Close All Panels";
+		private string menu7Text = "Unused 1";
 		public string Menu7Text
 		{
 			get
@@ -290,6 +290,7 @@ namespace WPFPages . Views
 			Storyboard s = null;
 			if ( counter == 0 )
 			{
+				//Hide menu
 				s = ( Storyboard ) TryFindResource ( "SlideStackPanelRight" );
 				var uri = new Uri ( "/Icons/left-arrow.png", UriKind . Relative );
 				var bitmap = new BitmapImage ( uri );
@@ -297,11 +298,12 @@ namespace WPFPages . Views
 				myimage . Visibility = Visibility . Visible;
 				OpenCloseButton . Visibility = Visibility . Hidden;
 				myimage2 . Visibility = Visibility . Visible;
-
+				OpenButton . Visibility = Visibility . Visible;
 				counter++;
 			}
 			else
 			{
+				//Show menu
 				s = ( Storyboard ) TryFindResource ( "SlideStackPanelLeft" );
 				var uri = new Uri ( "/Icons/right-arrow.png", UriKind . Relative );
 				var bitmap = new BitmapImage ( uri );
@@ -309,6 +311,7 @@ namespace WPFPages . Views
 				myimage . Visibility = Visibility . Hidden;
 				OpenCloseButton . Visibility = Visibility . Visible;
 				myimage2 . Visibility = Visibility . Hidden;
+				OpenButton . Visibility = Visibility . Hidden;
 				//				//				RectbuttonStackPanel . RenderTransform = mySliderLeft;
 				//				mySliderLeft . Begin ( this, true );
 				//				s = ( Storyboard ) TryFindResource ( "mySliderLeft" );
@@ -441,6 +444,135 @@ namespace WPFPages . Views
 			//Testbuton functionality
 		}
 		#endregion TestButton functionality
+
+		#region TextShadowColor
+		public Color TextShadowColor
+		{
+			get
+			{
+				return ( Color ) GetValue ( TextShadowColorProperty );
+			}
+			set
+			{
+				SetValue ( TextShadowColorProperty, value );
+				this . Refresh ( );
+			}
+			//set{}
+		}
+		public static readonly DependencyProperty TextShadowColorProperty =
+			DependencyProperty . Register ( "TextShadowColor",
+			typeof ( Color ),
+			typeof ( AnimationTest ),
+			new PropertyMetadata ( Colors . DarkGray ) );
+
+		#endregion
+
+		#region TextShadowOpacity
+		public double TextShadowOpacity
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowOpacitProperty );
+			}
+			set
+			{
+				SetValue ( TextShadowOpacitProperty, value );
+				this . Refresh ( );
+			}
+
+		}
+		public static readonly DependencyProperty TextShadowOpacitProperty =
+			DependencyProperty . Register ( "TextShadowOpacity",
+			typeof ( double ),
+			typeof ( AnimationTest ),
+			new PropertyMetadata ( ( double ) 0.5 ), OnTextShadowOpacityProperty );
+
+		private static bool OnTextShadowOpacityProperty ( object value )
+		{
+			return true;
+		}
+		#endregion
+
+		#region TextShadowRadius
+		public double TextShadowRadius
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowRadiusProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowRadiusProperty, value );
+				this . Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowRadiusProperty =
+			DependencyProperty . Register ( "TextShadowRadius",
+			typeof ( double ),
+			typeof ( AnimationTest ),
+			new PropertyMetadata ( ( double ) 1 ), OnTextShadowRadiusProperty );
+
+		private static bool OnTextShadowRadiusProperty ( object value )
+		{
+			return true;
+		}
+		#endregion
+
+		#region TextShadowSize
+		public double TextShadowSize
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowSizeProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowSizeProperty, value );
+				this. Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowSizeProperty =
+			DependencyProperty . Register ( "TextShadowSize",
+			typeof ( double ),
+			typeof ( AnimationTest ),
+			new PropertyMetadata ( ( double ) 2 ), OnTextShadowSizePropertyProperty );
+
+		private static bool OnTextShadowSizePropertyProperty ( object value )
+		{
+			//			Console . WriteLine ( $"ShadowBlurSizeProperty = {value}" );
+
+			return true;
+		}
+		#endregion
+
+
+		#region TextShadowDirection
+		public double TextShadowDirection
+		{
+			get
+			{
+				return ( double ) GetValue ( TextShadowDirectionProperty );
+			}
+			//set { }
+			set
+			{
+				SetValue ( TextShadowDirectionProperty, value );
+				this . Refresh ( );
+			}
+		}
+		public static readonly DependencyProperty TextShadowDirectionProperty =
+			DependencyProperty . Register ( "TextShadowDirection",
+			typeof ( double ),
+			typeof ( AnimationTest ),
+			new PropertyMetadata ( ( double ) 330 ), OnTextShadowDirectionPropertyProperty );
+
+		private static bool OnTextShadowDirectionPropertyProperty ( object value )
+		{
+			return true;
+		}
+		#endregion
 
 		#endregion
 
@@ -602,7 +734,7 @@ namespace WPFPages . Views
 
 		private void Tb1_MouseLeftButtonDown ( object sender, MouseButtonEventArgs e )
 		{
-
+			
 			if ( SlideOutMenu . Width > 0 )
 			{
 				Storyboard s = ( Storyboard ) TryFindResource ( "HideLeftMenu" );
@@ -625,81 +757,99 @@ namespace WPFPages . Views
 		}
 		private void Menu1_Click ( object sender, MouseButtonEventArgs e )
 		{
-			LeftStackpanel . Visibility = Visibility . Hidden;
-			Panel3Canvas . Visibility = Visibility . Hidden;
+			Panel2 . Visibility = Visibility . Hidden;
+			Panel3 . Visibility = Visibility . Hidden;
 			Panel4 . Visibility = Visibility . Hidden;
 			TabControlPanel . Visibility = Visibility . Hidden;
+			ThreeDButtonsPanel . Visibility = Visibility . Hidden;
 
-			Panel1Canvas . Visibility = Visibility . Visible;
+			Panel1 . Visibility = Visibility . Visible;
+			Title = "Panel1 visible";
 		}
 		private void Menu2_Click ( object sender, MouseButtonEventArgs e )
 		{
-			LeftStackpanel . Visibility = Visibility . Hidden;
-			Panel1Canvas . Visibility = Visibility . Hidden;
-			Panel3Canvas . Visibility = Visibility . Hidden;
+			Panel1 . Visibility = Visibility . Hidden;
+			Panel3 . Visibility = Visibility . Hidden;
+			Panel4 . Visibility = Visibility . Hidden;
 			TabControlPanel . Visibility = Visibility . Hidden;
+			ThreeDButtonsPanel . Visibility = Visibility . Hidden;
 
-			Panel4 . Visibility = Visibility . Visible;
+			Panel2 . Visibility = Visibility . Visible;
+			Title = "Panel2 visible";
 		}
 		private void Menu3_Click ( object sender, MouseButtonEventArgs e )
 		{
-			LeftStackpanel . Visibility = Visibility . Hidden;
-			Panel1Canvas . Visibility = Visibility . Hidden;
-			Panel4. Visibility = Visibility . Hidden;
+			Panel1 . Visibility = Visibility . Hidden;
+			Panel2 . Visibility = Visibility . Hidden;
+			Panel4 . Visibility = Visibility . Hidden;
 			TabControlPanel . Visibility = Visibility . Hidden;
+			ThreeDButtonsPanel . Visibility = Visibility . Hidden;
 
-			Panel3Canvas . Visibility = Visibility . Visible;
+			Panel3 . Visibility = Visibility . Visible;
+			Title = "Panel3Canvas visible";
 		}
 		private void Menu4_Click ( object sender, MouseButtonEventArgs e )
 		{
-			LeftStackpanel . Visibility = Visibility . Hidden;
-			Panel1Canvas . Visibility = Visibility . Hidden;
-			Panel3Canvas . Visibility = Visibility . Hidden;
+			Panel1 . Visibility = Visibility . Hidden;
+			Panel2 . Visibility = Visibility . Hidden;
+			Panel3 . Visibility = Visibility . Hidden;
 			Panel4 . Visibility = Visibility . Hidden;
-			TabControlPanel . Visibility = Visibility . Hidden;
+			ThreeDButtonsPanel . Visibility = Visibility . Hidden;
 
 			TabControlPanel . Visibility = Visibility . Visible;
 			LeftslidingMenuMarker . Visibility = Visibility.Visible;
-			
+			Title = "TabControlPanel visible";
+
 		}
 		private void Menu5_Click ( object sender, MouseButtonEventArgs e )
 		{
-			Panel1Canvas . Visibility = Visibility . Hidden;
-			Panel3Canvas . Visibility = Visibility . Hidden;
+			Panel1 . Visibility = Visibility . Hidden;
+			Panel2 . Visibility = Visibility . Hidden;
+			Panel3 . Visibility = Visibility . Hidden;
 			Panel4 . Visibility = Visibility . Hidden;
 			TabControlPanel . Visibility = Visibility . Hidden;
 
-			LeftStackpanel . Visibility = Visibility . Visible;
+			ThreeDButtonsPanel . Visibility = Visibility . Visible;
+
+
+			Title = "ThreeDButtonsPanel visible";
 		}
 		private void Menu6_Click ( object sender, MouseButtonEventArgs e )
 	{
-			LeftStackpanel . Visibility = Visibility . Hidden;
-			Panel1Canvas . Visibility = Visibility . Hidden;
-			Panel3Canvas . Visibility = Visibility . Hidden;
-			Panel4 . Visibility = Visibility . Hidden;
+			Panel1 . Visibility = Visibility . Hidden;
+			Panel2 . Visibility = Visibility . Hidden;
+			Panel3 . Visibility = Visibility . Hidden;
 			TabControlPanel . Visibility = Visibility . Hidden;
+			ThreeDButtonsPanel . Visibility = Visibility . Hidden;
 
-			}
+			Panel4 . Visibility = Visibility . Visible;
+			Title = "Panel 4 visible";
+
+		}
 		private void Menu7_Click ( object sender, MouseButtonEventArgs e )
 		{
-			LeftStackpanel . Visibility = Visibility . Hidden;
-			Panel1Canvas . Visibility = Visibility . Hidden;
-			Panel3Canvas . Visibility = Visibility . Hidden;
+			Panel1 . Visibility = Visibility . Hidden;
+			Panel2 . Visibility = Visibility . Hidden;
+			Panel3 . Visibility = Visibility . Hidden;
 			Panel4 . Visibility = Visibility . Hidden;
+			TabControlPanel . Visibility = Visibility . Hidden;
+			ThreeDButtonsPanel . Visibility = Visibility . Hidden;
+			Title = "Unused1 visible";
+
 		}
 
 		private void Expand_MenuItemBorder ( object sender, MouseEventArgs e )
 		{
-			Thickness t = new Thickness ( );
-			Border b = sender as Border;
-			b . Height = 120;
-			if ( b . Name == "Menu6" )
-			{
-				t = tb6 . Margin;
-				t . Top = 0;
-				//				tb6 . Margin = t;
-				TextTopZero = t;
-			}
+			//Thickness t = new Thickness ( );
+			//Border b = sender as Border;
+			//b . Height = 120;
+			//if ( b . Name == "Menu6" )
+			//{
+			//	t = tb6 . Margin;
+			//	t . Top = 0;
+			//	//				tb6 . Margin = t;
+			//	TextTopZero = t;
+			//}
 		}
 
 		private void Expand_MenuItemTextblock ( object sender, MouseEventArgs e )
@@ -764,298 +914,254 @@ namespace WPFPages . Views
 			NativeMethods . SetCursorPos ( ( int ) newpos . X, ( int ) newpos . Y );
 
 		}
-		private void Expand_MenuItemBorder1 ( object sender, MouseEventArgs e )
-		{
-			defaultMenuheight = ( int ) Menu1 . ActualHeight;
-			//			GetPointerPosition (AnimWin, LeftPanel, Menu1 );
-			Border b = sender as Border;
-			TextBlock tb = new TextBlock ( );
-			if ( b != null )
-			{
-				Border o = ( Border ) FindName ( "Menu1" );
-				currentCtrlpos = Mouse . GetPosition ( o );
-				Expanded ( b, tb1, Menu1Text, dummymenutext1 );
-			}
-			else
-			{
-				tb = sender as TextBlock;
-				Border o = ( Border ) FindName ( "Menu1" );
-				currentCtrlpos = Mouse . GetPosition ( o );
-				Expanded ( o, tb, Menu1Text, dummymenutext1 );
-			}
-			//ShowMenuOptions ( null, true );
-		}
-		private void Contract_Border1 ( object sender, MouseEventArgs e )
-		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu1 ) == false )
-					return;
-				Contract ( b, tb1, Menu1Text );
-				//				Menu1 . Height = defaultMenuheight;
-				Menu1 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu1 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu1, t, Menu1Text );
-				//				Menu1. Height = defaultMenuheight;
-				Menu1 . Refresh ( );
-			}
-			//			ShowMenuOptions ( Menu1, false );
-		}
 		private void Expand_MenuItemBorder2 ( object sender, MouseEventArgs e )
 		{
-			defaultMenuheight = ( int ) Menu2 . ActualHeight;
-			//			GetPointerPosition ( AnimWin, LeftPanel, Menu2 );
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				defaultMenuheight = ( int ) b . Height;
-				Expanded ( b, tb2, Menu2Text, dummymenutext2 );
-			}
-			else
-			{
-				t = sender as TextBlock;
-				defaultMenuheight = ( int ) t . Height;
-				Expanded ( Menu2, t, Menu2Text, dummymenutext2 );
-			}
+			//defaultMenuheight = ( int ) Menu2 . ActualHeight;
+			////			GetPointerPosition ( AnimWin, LeftPanel, Menu2 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	defaultMenuheight = ( int ) b . Height;
+			//	Expanded ( b, tb2, Menu2Text, dummymenutext2 );
+			//}
+			//else
+			//{
+			//	t = sender as TextBlock;
+			//	defaultMenuheight = ( int ) t . Height;
+			//	Expanded ( Menu2, t, Menu2Text, dummymenutext2 );
+			//}
 			//			ShowMenuOptions ( null, false );
 		}
 		private void Contract_Border2 ( object sender, MouseEventArgs e )
 		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu2 ) == false )
-					return;
-				Contract ( b, tb2, Menu2Text );
-				//				Menu2 . Height = defaultMenuheight;
-				Menu2 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu2 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu2, t, Menu2Text );
-				//				Menu2 . Height = defaultMenuheight;
-				Menu2 . Refresh ( );
-			}
-			//			ShowMenuOptions ( Menu2, false );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	if ( CheckCallerOpen ( Menu2 ) == false )
+			//		return;
+			//	Contract ( b, tb2, Menu2Text );
+			//	//				Menu2 . Height = defaultMenuheight;
+			//	Menu2 . Refresh ( );
+			//}
+			//else
+			//{
+			//	if ( CheckCallerOpen ( Menu2 ) == false )
+			//		return;
+			//	t = sender as TextBlock;
+			//	Contract ( Menu2, t, Menu2Text );
+			//	//				Menu2 . Height = defaultMenuheight;
+			//	Menu2 . Refresh ( );
+			//}
+			////			ShowMenuOptions ( Menu2, false );
 		}
 		private void Expand_MenuItemBorder3 ( object sender, MouseEventArgs e )
 		{
-			defaultMenuheight = ( int ) Menu3 . ActualHeight;
-			//			GetPointerPosition ( AnimWin, LeftPanel, Menu3 );
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				defaultMenuheight = ( int ) b . Height;
-				Expanded ( b, tb3, Menu3Text, dummymenutext3 );
-			}
-			else
-			{
-				t = sender as TextBlock;
-				defaultMenuheight = ( int ) t . Height;
-				Expanded ( Menu3, t, Menu3Text, dummymenutext3 );
-			}
-			//			ShowMenuOptions ( Menu3, true );
+			//defaultMenuheight = ( int ) Menu3 . ActualHeight;
+			////			GetPointerPosition ( AnimWin, LeftPanel, Menu3 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	defaultMenuheight = ( int ) b . Height;
+			//	Expanded ( b, tb3, Menu3Text, dummymenutext3 );
+			//}
+			//else
+			//{
+			//	t = sender as TextBlock;
+			//	defaultMenuheight = ( int ) t . Height;
+			//	Expanded ( Menu3, t, Menu3Text, dummymenutext3 );
+			//}
+			////			ShowMenuOptions ( Menu3, true );
 		}
 		private void Contract_Border3 ( object sender, MouseEventArgs e )
 		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu3 ) == false )
-					return;
-				Contract ( b, tb3, Menu3Text );
-				//				Menu3 . Height = defaultMenuheight;
-				Menu3 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu3 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu3, t, Menu3Text );
-				//				Menu3 . Height = defaultMenuheight;
-				Menu3 . Refresh ( );
-			}
-			//			ShowMenuOptions ( Menu3, false );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	if ( CheckCallerOpen ( Menu3 ) == false )
+			//		return;
+			//	Contract ( b, tb3, Menu3Text );
+			//	//				Menu3 . Height = defaultMenuheight;
+			//	Menu3 . Refresh ( );
+			//}
+			//else
+			//{
+			//	if ( CheckCallerOpen ( Menu3 ) == false )
+			//		return;
+			//	t = sender as TextBlock;
+			//	Contract ( Menu3, t, Menu3Text );
+			//	//				Menu3 . Height = defaultMenuheight;
+			//	Menu3 . Refresh ( );
+			//}
+			////			ShowMenuOptions ( Menu3, false );
 		}
 		private void Expand_MenuItemBorder4 ( object sender, MouseEventArgs e )
 		{
-			defaultMenuheight = ( int ) Menu4 . ActualHeight;
-			//			GetPointerPosition ( AnimWin, LeftPanel, Menu4 );
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				defaultMenuheight = ( int ) b . Height;
-				Expanded ( b, tb4, Menu4Text, dummymenutext4 );
-			}
-			else
-			{
-				t = sender as TextBlock;
-				defaultMenuheight = ( int ) t . Height;
-				Expanded ( Menu4, t, Menu4Text, dummymenutext4 );
-			}
+			//defaultMenuheight = ( int ) Menu4 . ActualHeight;
+			////			GetPointerPosition ( AnimWin, LeftPanel, Menu4 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	defaultMenuheight = ( int ) b . Height;
+			//	Expanded ( b, tb4, Menu4Text, dummymenutext4 );
+			//}
+			//else
+			//{
+			//	t = sender as TextBlock;
+			//	defaultMenuheight = ( int ) t . Height;
+			//	Expanded ( Menu4, t, Menu4Text, dummymenutext4 );
+			//}
 			//			ShowMenuOptions ( Menu4, true );
 		}
 		private void Contract_Border4 ( object sender, MouseEventArgs e )
 		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu4 ) == false )
-					return;
-				Contract ( b, tb4, Menu4Text );
-				//				Menu4 . Height = defaultMenuheight;
-				Menu4 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu4 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu4, t, Menu4Text );
-				//				Menu4 . Height = defaultMenuheight;
-				Menu4 . Refresh ( );
-			}
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	if ( CheckCallerOpen ( Menu4 ) == false )
+			//		return;
+			//	Contract ( b, tb4, Menu4Text );
+			//	//				Menu4 . Height = defaultMenuheight;
+			//	Menu4 . Refresh ( );
+			//}
+			//else
+			//{
+			//	if ( CheckCallerOpen ( Menu4 ) == false )
+			//		return;
+			//	t = sender as TextBlock;
+			//	Contract ( Menu4, t, Menu4Text );
+			//	//				Menu4 . Height = defaultMenuheight;
+			//	Menu4 . Refresh ( );
+			//}
 			//			ShowMenuOptions ( Menu4, false );
 		}
 		private void Expand_MenuItemBorder5 ( object sender, MouseEventArgs e )
 		{
-			defaultMenuheight = ( int ) Menu5 . ActualHeight;
-			//			GetPointerPosition ( AnimWin, LeftPanel, Menu5 );
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				defaultMenuheight = ( int ) b . Height;
-				Expanded ( b, tb5, Menu5Text, dummymenutext5 );
-			}
-			else
-			{
-				t = sender as TextBlock;
-				defaultMenuheight = ( int ) t . Height;
-				Expanded ( Menu5, t, Menu5Text, dummymenutext5 );
-			}
-			//			ShowMenuOptions ( Menu5, true );
+			//defaultMenuheight = ( int ) Menu5 . ActualHeight;
+			////			GetPointerPosition ( AnimWin, LeftPanel, Menu5 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	defaultMenuheight = ( int ) b . Height;
+			//	Expanded ( b, tb5, Menu5Text, dummymenutext5 );
+			//}
+			//else
+			//{
+			//	t = sender as TextBlock;
+			//	defaultMenuheight = ( int ) t . Height;
+			//	Expanded ( Menu5, t, Menu5Text, dummymenutext5 );
+			//}
+			////			ShowMenuOptions ( Menu5, true );
 		}
 		private void Contract_Border5 ( object sender, MouseEventArgs e )
 		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu5 ) == false )
-					return;
-				Contract ( b, tb5, Menu5Text );
-				//				Menu5 . Height = defaultMenuheight;
-				Menu5 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu5 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu5, t, Menu5Text );
-				//				Menu5 . Height = defaultMenuheight;
-				Menu5 . Refresh ( );
-			}
-			//			ShowMenuOptions ( Menu5, false );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	if ( CheckCallerOpen ( Menu5 ) == false )
+			//		return;
+			//	Contract ( b, tb5, Menu5Text );
+			//	//				Menu5 . Height = defaultMenuheight;
+			//	Menu5 . Refresh ( );
+			//}
+			//else
+			//{
+			//	if ( CheckCallerOpen ( Menu5 ) == false )
+			//		return;
+			//	t = sender as TextBlock;
+			//	Contract ( Menu5, t, Menu5Text );
+			//	//				Menu5 . Height = defaultMenuheight;
+			//	Menu5 . Refresh ( );
+			//}
+			////			ShowMenuOptions ( Menu5, false );
 		}
 		private void Expand_MenuItemBorder6 ( object sender, MouseEventArgs e )
 		{
-			defaultMenuheight = ( int ) Menu6 . ActualHeight;
-			//			GetPointerPosition ( AnimWin, LeftPanel, Menu6 );
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				defaultMenuheight = ( int ) b . Height;
-				Expanded ( b, tb6, Menu6Text, dummymenutext6 );
-			}
-			else
-			{
-				t = sender as TextBlock;
-				defaultMenuheight = ( int ) t . Height;
-				Expanded ( Menu6, t, Menu6Text, dummymenutext6 );
-			}
-			//			ShowMenuOptions ( Menu6, true );
+			//defaultMenuheight = ( int ) Menu6 . ActualHeight;
+			////			GetPointerPosition ( AnimWin, LeftPanel, Menu6 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	defaultMenuheight = ( int ) b . Height;
+			//	Expanded ( b, tb6, Menu6Text, dummymenutext6 );
+			//}
+			//else
+			//{
+			//	t = sender as TextBlock;
+			//	defaultMenuheight = ( int ) t . Height;
+			//	Expanded ( Menu6, t, Menu6Text, dummymenutext6 );
+			//}
+			////			ShowMenuOptions ( Menu6, true );
 		}
 		private void Contract_Border6 ( object sender, MouseEventArgs e )
 		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu6 ) == false )
-					return;
-				Contract ( b, tb6, Menu6Text );
-				Menu6 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu6 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu6, t, Menu6Text );
-				Menu6 . Refresh ( );
-			}
-			Thread . Sleep ( 100 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	if ( CheckCallerOpen ( Menu6 ) == false )
+			//		return;
+			//	Contract ( b, tb6, Menu6Text );
+			//	Menu6 . Refresh ( );
+			//}
+			//else
+			//{
+			//	if ( CheckCallerOpen ( Menu6 ) == false )
+			//		return;
+			//	t = sender as TextBlock;
+			//	Contract ( Menu6, t, Menu6Text );
+			//	Menu6 . Refresh ( );
+			//}
+			//Thread . Sleep ( 100 );
 			//			ShowMenuOptions ( Menu6, false );
 		}
 		private void Expand_MenuItemBorder7 ( object sender, MouseEventArgs e )
 		{
-			defaultMenuheight = ( int ) Menu7 . ActualHeight;
-			//			GetPointerPosition ( AnimWin, LeftPanel, Menu7 );
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				defaultMenuheight = ( int ) b . Height;
-				Expanded ( b, tb7, Menu7Text, dummymenutext7 );
-			}
-			else
-			{
-				t = sender as TextBlock;
-				defaultMenuheight = ( int ) t . Height;
-				Expanded ( Menu7, t, Menu7Text, dummymenutext7 );
-			}
+			//defaultMenuheight = ( int ) Menu7 . ActualHeight;
+			////			GetPointerPosition ( AnimWin, LeftPanel, Menu7 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	defaultMenuheight = ( int ) b . Height;
+			//	Expanded ( b, tb7, Menu7Text, dummymenutext7 );
+			//}
+			//else
+			//{
+			//	t = sender as TextBlock;
+			//	defaultMenuheight = ( int ) t . Height;
+			//	Expanded ( Menu7, t, Menu7Text, dummymenutext7 );
+			//}
 			//			ShowMenuOptions ( Menu7, true );
 		}
 		private void Contract_Border7 ( object sender, MouseEventArgs e )
 		{
-			Border b = sender as Border;
-			TextBlock t = new TextBlock ( );
-			if ( b != null )
-			{
-				if ( CheckCallerOpen ( Menu7 ) == false )
-					return;
-				Contract ( b, tb7, Menu7Text );
-				Menu7 . Refresh ( );
-			}
-			else
-			{
-				if ( CheckCallerOpen ( Menu7 ) == false )
-					return;
-				t = sender as TextBlock;
-				Contract ( Menu7, t, Menu7Text );
-				Menu7 . Refresh ( );
-			}
-			Thread . Sleep ( 100 );
+			//Border b = sender as Border;
+			//TextBlock t = new TextBlock ( );
+			//if ( b != null )
+			//{
+			//	if ( CheckCallerOpen ( Menu7 ) == false )
+			//		return;
+			//	Contract ( b, tb7, Menu7Text );
+			//	Menu7 . Refresh ( );
+			//}
+			//else
+			//{
+			//	if ( CheckCallerOpen ( Menu7 ) == false )
+			//		return;
+			//	t = sender as TextBlock;
+			//	Contract ( Menu7, t, Menu7Text );
+			//	Menu7 . Refresh ( );
+			//}
+			//Thread . Sleep ( 100 );
 			//			ShowMenuOptions ( Menu7, false );
 		}
 
@@ -1102,14 +1208,17 @@ namespace WPFPages . Views
 			if ( Menu2 . Visibility == Visibility . Visible )
 			{
 				ShowMenuOptions ( null, false );
-				tb0 . Text = "Show Menu Options";
-				SlideOutMenu . Background = new SolidColorBrush(Colors.Transparent);
+//				this.Text = "Show Menu Options";
+				SlideOutMenu . Background = new SolidColorBrush ( Colors . Transparent );
+//				SlideOutMenu. Height = 25;
 			}
 			else
 			{
 				ShowMenuOptions ( null, true );
-				tb0 . Text = "Hide Menu Options";
-				SlideOutMenu .Background = ( Brush)FindResource("Black5");
+//				Text= "Show Menu Options";
+//				MenuOpen . Text = "Hide Menu Options";
+				SlideOutMenu . Background = ( Brush ) FindResource ( "Black5" );
+//				SlideOutMenu . Height = 500;
 			}
 		}
 
@@ -1157,35 +1266,35 @@ namespace WPFPages . Views
 			Menu6 . Visibility = Visibility . Collapsed;
 			Menu7 . Visibility = Visibility . Collapsed;
 			AnimWin . Refresh ( );
-			if ( menu == Menu1 && open )
-			{
-				Menu1 . Visibility = Visibility . Visible;
-			}
-			else if ( menu == Menu2 && open )
-			{
-				Menu2 . Visibility = Visibility . Visible;
-			}
-			else if ( menu == Menu3 && open )
-			{
-				Menu3 . Visibility = Visibility . Visible;
-			}
-			else if ( menu == Menu4 && open )
-			{
-				Menu4 . Visibility = Visibility . Visible;
-			}
-			else if ( menu == Menu5 && open )
+			//if ( menu == Menu1 && open )
+			//{
+			//	Menu1 . Visibility = Visibility . Visible;
+			//}
+			//if ( menu == Menu2 && open )
+			//{
+			//	Menu2 . Visibility = Visibility . Visible;
+			//}
+			//else if ( menu == Menu3 && open )
+			//{
+			//	Menu3 . Visibility = Visibility . Visible;
+			//}
+			//else if ( menu == Menu4 && open )
+			//{
+			//	Menu4 . Visibility = Visibility . Visible;
+			//}
+			//else if ( menu == Menu5 && open )
 
-			{
-				Menu6 . Visibility = Visibility . Visible;
-			}
-			else if ( menu == Menu6 && open )
-			{
-				Menu6 . Visibility = Visibility . Visible;
-			}
-			else if ( menu == Menu7 && open )
-			{
-				Menu7 . Visibility = Visibility . Visible;
-			}
+			//{
+			//	Menu6 . Visibility = Visibility . Visible;
+			//}
+			//else if ( menu == Menu6 && open )
+			//{
+			//	Menu6 . Visibility = Visibility . Visible;
+			//}
+			//else if ( menu == Menu7 && open )
+			//{
+			//	Menu7 . Visibility = Visibility . Visible;
+			//}
 		}
 		private void Expanded ( Border border, TextBlock textblock, string originaltext, string newtext )
 		{
@@ -1251,20 +1360,20 @@ namespace WPFPages . Views
 		}
 		private bool CheckCallerOpen ( Border border )
 		{
-			if ( border == Menu1 )
-				return Menu1Open;
-			else if ( border == Menu2 )
-				return Menu2Open;
-			else if ( border == Menu3 )
-				return Menu3Open;
-			else if ( border == Menu4 )
-				return Menu4Open;
-			else if ( border == Menu5 )
-				return Menu5Open;
-			else if ( border == Menu6 )
-				return Menu6Open;
-			else if ( border == Menu7 )
-				return Menu7Open;
+			//if ( border == Menu1 )
+			//	return Menu1Open;
+			//if ( border == Menu2 )
+			//	return Menu2Open;
+			//else if ( border == Menu3 )
+			//	return Menu3Open;
+			//else if ( border == Menu4 )
+			//	return Menu4Open;
+			//else if ( border == Menu5 )
+			//	return Menu5Open;
+			//else if ( border == Menu6 )
+			//	return Menu6Open;
+			//else if ( border == Menu7 )
+			//	return Menu7Open;
 			return false;
 		}
 		private void ReSetOpenFlags ( Border border, bool setting )
@@ -1280,38 +1389,51 @@ namespace WPFPages . Views
 				Menu7Open = false;
 			}
 
-			if ( border == Menu1 )
-				Menu1Open = setting;
-			else if ( border == Menu2 )
-				Menu2Open = setting;
-			else if ( border == Menu3 )
-				Menu3Open = setting;
-			else if ( border == Menu4 )
-				Menu4Open = setting;
-			else if ( border == Menu5 )
-				Menu5Open = setting;
-			else if ( border == Menu6 )
-				Menu5Open = setting;
-			else if ( border == Menu7 )
-				Menu7Open = setting;
+			//if ( border == Menu1 )
+			//	Menu1Open = setting;
+			//if ( border == Menu2 )
+			//	Menu2Open = setting;
+			//else if ( border == Menu3 )
+			//	Menu3Open = setting;
+			//else if ( border == Menu4 )
+			//	Menu4Open = setting;
+			//else if ( border == Menu5 )
+			//	Menu5Open = setting;
+			//else if ( border == Menu6 )
+			//	Menu5Open = setting;
+			//else if ( border == Menu7 )
+			//	Menu7Open = setting;
 		}
 
 		private void SlideMenu_mouseEnter ( object sender, MouseEventArgs e )
 		{
-			if ( LeftMenuTogglePanel . Opacity < 1.0 )
-			{
-				Storyboard s = ( Storyboard ) TryFindResource ( "FadeInMenu" );
-				s . Begin ( );
-			}
+			LeftMenuTogglePanel . Opacity = 1;
 		}
 
 		private void SlideMenu_mouseLeave ( object sender, MouseEventArgs e )
 		{
-			if ( LeftMenuTogglePanel . Opacity >= 1.0 )
-			{
-				Storyboard s = ( Storyboard ) TryFindResource ( "FadeOutMenu" );
-				s . Begin ( );
-			}
+			LeftMenuTogglePanel . Opacity = 0.4;
+
+			//if ( LeftMenuTogglePanel . Opacity >= 1.0 )
+			//{
+			//	Storyboard s = ( Storyboard ) TryFindResource ( "FadeOutMenu" );
+			//	s . Begin ( );
+			//}
+		}
+
+		private void TogglePanes_Loaded ( object sender, RoutedEventArgs e )
+		{
+
+		}
+
+		private void ShadowLabelClick ( object sender, MouseButtonEventArgs e )
+		{
+			Console . WriteLine ($"New LabelText Clicked");
+		}
+
+		private void ImgButton_Loaded ( object sender, RoutedEventArgs e )
+		{
+
 		}
 	}
 }

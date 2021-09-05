@@ -38,10 +38,10 @@
 				<Setter Property="FocusVisualStyle" Value="{x:Null}" />
 				<Setter Property="Focusable" Value="False" />
 			</Style>
-			<Style TargetType="{x:Type TextBlock}">
+			<!--<Style TargetType="{x:Type TextBlock}">
 				<Setter Property="FocusVisualStyle" Value="{x:Null}" />
 				<Setter Property="Focusable" Value="False" />
-			</Style>
+			</Style>-->
 
 		</ResourceDictionary>
 
